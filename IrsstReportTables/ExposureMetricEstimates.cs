@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zygotine.WebExpo;
 using Zygotine.Statistics.Distribution;
 
 namespace IrsstReportTables
@@ -10,16 +11,22 @@ namespace IrsstReportTables
     public class ExposureMetricEstimates
     {
         double Oel { get; set; }
-        bool LogNormDist { get; set; }
+        bool LogNormDist { get; set; } = true;
         double[] MuChain { get; set; }
         double[] SigmaChain { get; set; }
 
-        public ExposureMetricEstimates(double oel, bool logNormDist = true, double[] muChain = null, double[] sigmaChain = null)
+        public ExposureMetricEstimates(double oel, Model m = null)
         {
             Oel = oel;
-            LogNormDist = logNormDist;
-            MuChain = muChain;
-            SigmaChain = sigmaChain;
+
+            if (m != null)
+            {
+                LogNormDist = m.OutcomeIsLogNormallyDistributed;
+
+                m.Compute();
+                MuChain = m.Result.GetChainByName("muSample");
+                SigmaChain = m.Result.GetChainByName("sdSample");
+            }
         }
 
         public TableEntryData GeomMean()

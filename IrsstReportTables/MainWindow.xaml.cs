@@ -19,7 +19,6 @@ namespace IrsstReportTables
 {
     public partial class MainWindow : Window
     {
-        Model segIVModel, uninfModel, pdModel;
         MeasureList ml;
         bool logNormDist;
         NumberFormatInfo nfi;
@@ -28,7 +27,6 @@ namespace IrsstReportTables
         {
             InitializeComponent();
             Init();
-            RunModel();
         }
 
         void Init()
@@ -39,24 +37,6 @@ namespace IrsstReportTables
             this.logNormDist = true;
             this.nfi = new NumberFormatInfo();
             this.nfi.NumberDecimalSeparator = ".";
-        }
-
-        void RunModel()
-        {
-            /*
-             * Init and run the model
-             */
-
-            SEGInformedVarModelParameters modelParams = SEGInformedVarModelParameters.GetDefaults(this.logNormDist);
-            this.segIVModel = new SEGInformedVarModel(measures: ml, specificParams: modelParams);
-            this.segIVModel.Compute();
-
-            UninformativeModelParameters unmodelParams = UninformativeModelParameters.GetDefaults(this.logNormDist);
-            this.uninfModel = new SEGUninformativeModel(ml, unmodelParams);
-            this.uninfModel.Compute();
-
-            this.pdModel = new SEGInformedVarModel(measures: ml, specificParams: modelParams, pastDataSummary: new PastDataSummary(mean: 4, sd: 2.4, n: 5));
-            this.pdModel.Compute();
 
             Table3.ItemsSource = LoadTable3Data();
             Table4.ItemsSource = LoadTable4Data();
@@ -66,11 +46,10 @@ namespace IrsstReportTables
         {
             List<TableEntry> tableData = new List<TableEntry>();
 
-            double[] muChain = this.segIVModel.Result.GetChainByName("muSample");
-            double[] sigmaChain = this.segIVModel.Result.GetChainByName("sdSample");
-
-            double oel = this.ml.OEL;
-            ExposureMetricEstimates eme = new ExposureMetricEstimates(oel, this.logNormDist, muChain, sigmaChain);
+            ExposureMetricEstimates eme = new ExposureMetricEstimates(
+                                            this.ml.OEL,
+                                            new SEGInformedVarModel(measures: ml, specificParams:
+                                                SEGInformedVarModelParameters.GetDefaults(this.logNormDist)));
 
             tableData.Add(new TableEntry()
             {
@@ -120,21 +99,25 @@ namespace IrsstReportTables
         {
             List<TableEntry> tableData = new List<TableEntry>();
 
-            double[] muChainInformed = this.uninfModel.Result.GetChainByName("muSample");
-            double[] sigmaChain = this.uninfModel.Result.GetChainByName("sdSample");
-
-            ExposureMetricEstimates emeInformed = new ExposureMetricEstimates(this.ml.OEL,
-                                                                              this.logNormDist,
-                                                                              this.segIVModel.Result.GetChainByName("muSample"),
-                                                                              this.segIVModel.Result.GetChainByName("sdSample"));
-            ExposureMetricEstimates emeUninformed = new ExposureMetricEstimates(this.ml.OEL,
-                                                                                this.logNormDist,
-                                                                                this.uninfModel.Result.GetChainByName("muSample"),
-                                                                                this.uninfModel.Result.GetChainByName("sdSample"));
-            ExposureMetricEstimates emePdInformed = new ExposureMetricEstimates(this.ml.OEL,
-                                                                                this.logNormDist,
-                                                                                this.pdModel.Result.GetChainByName("muSample"),
-                                                                                this.pdModel.Result.GetChainByName("sdSample"));
+            ExposureMetricEstimates emeInformed = new ExposureMetricEstimates(
+                this.ml.OEL,
+                new SEGInformedVarModel(
+                    measures: ml,
+                    specificParams: SEGInformedVarModelParameters.GetDefaults(this.logNormDist)
+                ) );
+            ExposureMetricEstimates emeUninformed = new ExposureMetricEstimates(
+                this.ml.OEL,
+                new SEGUninformativeModel(
+                    measures: ml,
+                    specificParams: UninformativeModelParameters.GetDefaults(this.logNormDist)
+                ) );
+            ExposureMetricEstimates emePdInformed = new ExposureMetricEstimates(
+                this.ml.OEL,
+                new SEGInformedVarModel(
+                    measures: ml,
+                    specificParams: SEGInformedVarModelParameters.GetDefaults(this.logNormDist),
+                    pastDataSummary: new PastDataSummary(mean: 4, sd: 2.4, n: 5)
+                ) );
 
             tableData.Add(new TableEntry()
             {
