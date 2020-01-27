@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebExpoExamples", "WebExpoExamples\WebExpoExamples.csproj", "{386D0EA1-FEB0-4A7B-827E-696701F0D47F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrsstReportTables", "IrsstReportTables\IrsstReportTables.csproj", "{386D0EA1-FEB0-4A7B-827E-696701F0D47F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webExpoLib", "WebExpo\webExpoLib.csproj", "{EAEF21B2-E7FA-4421-81F7-0D09C9F3C701}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{386D0EA1-FEB0-4A7B-827E-696701F0D47F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{386D0EA1-FEB0-4A7B-827E-696701F0D47F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{386D0EA1-FEB0-4A7B-827E-696701F0D47F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAEF21B2-E7FA-4421-81F7-0D09C9F3C701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAEF21B2-E7FA-4421-81F7-0D09C9F3C701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAEF21B2-E7FA-4421-81F7-0D09C9F3C701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAEF21B2-E7FA-4421-81F7-0D09C9F3C701}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
