@@ -15,9 +15,13 @@ namespace IrsstReportTables
         double[] MuChain { get; set; }
         double[] SigmaChain { get; set; }
 
-        public ExposureMetricEstimates(double oel, Model m = null)
+        public ExposureMetricEstimates(double oel)
         {
             Oel = oel;
+        }
+        public ExposureMetricEstimates(Model m = null)
+        {
+            Oel = m.Measures.OEL;
 
             if (m != null)
             {
@@ -96,7 +100,7 @@ namespace IrsstReportTables
         public TableEntryData OverExposureRisk(bool p95 = true)
         {
             double[] chain = p95 ? P95Chain() : AmChain();
-            double risk = (double) OverExposureRisk(chain);
+            double risk = (double)OverExposureRisk(chain);
             return new OverExposureRiskPercentage(risk);
         }
 
@@ -113,5 +117,6 @@ namespace IrsstReportTables
 
             return null;
         }
+
     }
 }

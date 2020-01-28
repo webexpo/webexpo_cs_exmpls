@@ -5,26 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IrsstReportTables"
         mc:Ignorable="d"
-        Title="WebExpo C# Examples - IRSST Report" Height="850" Width="1200">
+        Title="WebExpo C# Examples - IRSST Report" Height="700" Width="920">
     <Grid>
-        <DataGrid Name="Table3" Height="200" Width="1010" HorizontalAlignment="Left" Margin="46,78,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="500" AutoGenerateColumns="False">
+        <DataGrid Name="Table3" Height="200" Width="810" HorizontalAlignment="Left" Margin="50,100,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="400" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
                 <DataGridTextColumn Header = "Point estimates and 90% credible interval" Binding = "{Binding Datum}" />
             </DataGrid.Columns>
         </DataGrid>
-        <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="46,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="58" Width="1010">
+        <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="58" Width="810">
         </TextBlock>
 
-        <DataGrid Name="Table4" Height="200" Width="1010" HorizontalAlignment="Left" Margin="46,374,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="200" AutoGenerateColumns="False">
+        <DataGrid Name="Table4" Height="200" Width="808" HorizontalAlignment="Left" Margin="50,414,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="200" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
                 <DataGridTextColumn Header = "Informedvar" Binding = "{Binding Datum}" />
                 <DataGridTextColumn Header = "Uninformative" Binding = "{Binding Datum2}" />
                 <DataGridTextColumn Header = "Past.data" Binding = "{Binding Datum3}" />
-                <DataGridTextColumn Header = "Riskband" Binding = "{Binding Datum4}" />
             </DataGrid.Columns>
         </DataGrid>
-        <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="46,304,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="70" Width="1010"><Span><Run Text="Table "/></Span><Span><Run Text="4"/></Span><Span><Run Text=" - Exposure metrics point estimates and credible intervals for 4 choices of prior distribution"/></Span></TextBlock>
+        <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,339,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="70" Width="808"><Span><Run Text="Table "/></Span><Span><Run Text="4"/></Span><Run Text=" - Exposure metrics point estimates and credible intervals for "/><Run Text="3"/><Run Text=" choices of prior distribution"/></TextBlock>
     </Grid>
 </Window>

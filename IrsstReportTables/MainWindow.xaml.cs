@@ -17,6 +17,8 @@ using System.Globalization;
 
 namespace IrsstReportTables
 {
+    using ExposureMetricFunc = Func<ExposureMetricEstimates, TableEntryData>;
+
     public partial class MainWindow : Window
     {
         MeasureList ml;
@@ -47,51 +49,24 @@ namespace IrsstReportTables
             List<TableEntry> tableData = new List<TableEntry>();
 
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
-                                            this.ml.OEL,
                                             new SEGInformedVarModel(measures: ml, specificParams:
                                                 SEGInformedVarModelParameters.GetDefaults(this.logNormDist)));
 
-            tableData.Add(new TableEntry()
-            {
-                Title = "GM",
-                Datum = eme.GeomMean()
-            });
+            Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
+                Tuple.Create("GM", new ExposureMetricFunc(e => e.GeomMean())),
+                Tuple.Create("GSD", new ExposureMetricFunc(e => e.GeomStanDev())),
+                Tuple.Create("Exceedance Fraction (%)", new ExposureMetricFunc(e => e.ExceedanceFrac(true))),
+                Tuple.Create("95th percentile", new ExposureMetricFunc(e => e.P95(true))),
+                Tuple.Create("AIHA band probabilities in % (95th percentile)", new ExposureMetricFunc(e => e.BandProbabilities())),
+                Tuple.Create("Arithmetic mean", new ExposureMetricFunc(e => e.ArithMean(true))),
+                Tuple.Create("AIHA band probabilities in % (AM)", new ExposureMetricFunc(e => e.BandProbabilities(false)))
+            };
 
-            tableData.Add(new TableEntry()
+            foreach (Tuple<string, ExposureMetricFunc> t in tuples)
             {
-                Title = "GSD",
-                Datum = eme.GeomStanDev()
-            });
+                tableData.Add(new TableEntry { Title = t.Item1 }.Add(t.Item2(eme)));
+            }
 
-            tableData.Add(new TableEntry()
-            {
-                Title = "Exceedance Fraction (%)",
-                Datum = eme.ExceedanceFrac(true)
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "95th percentile",
-                Datum = eme.P95(true)
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "AIHA band probabilities in % (95th percentile)",
-                Datum = eme.BandProbabilities()
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "Arithmetic mean",
-                Datum = eme.ArithMean(true)
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "AIHA band probabilities in % (AM)",
-                Datum = eme.BandProbabilities(false)
-            });
             return tableData;
         }
 
@@ -100,80 +75,39 @@ namespace IrsstReportTables
             List<TableEntry> tableData = new List<TableEntry>();
 
             ExposureMetricEstimates emeInformed = new ExposureMetricEstimates(
-                this.ml.OEL,
                 new SEGInformedVarModel(
                     measures: ml,
                     specificParams: SEGInformedVarModelParameters.GetDefaults(this.logNormDist)
                 ) );
             ExposureMetricEstimates emeUninformed = new ExposureMetricEstimates(
-                this.ml.OEL,
                 new SEGUninformativeModel(
                     measures: ml,
                     specificParams: UninformativeModelParameters.GetDefaults(this.logNormDist)
                 ) );
             ExposureMetricEstimates emePdInformed = new ExposureMetricEstimates(
-                this.ml.OEL,
                 new SEGInformedVarModel(
                     measures: ml,
                     specificParams: SEGInformedVarModelParameters.GetDefaults(this.logNormDist),
-                    pastDataSummary: new PastDataSummary(mean: 4, sd: 2.4, n: 5)
+                    pastDataSummary: new PastDataSummary(mean: Math.Log(5), sd: Math.Log(2.4), n: 5)
                 ) );
 
-            tableData.Add(new TableEntry()
-            {
-                Title = "GM (90% CrI)",
-                Datum = emeInformed.GeomMean(),
-                Datum2 = emeUninformed.GeomMean(),
-                Datum3 = emePdInformed.GeomMean()
-            });
+            ExposureMetricEstimates[] emes = new ExposureMetricEstimates[] { emeInformed, emeUninformed, emePdInformed };
 
-            tableData.Add(new TableEntry()
-            {
-                Title = "GSD (90% CrI)",
-                Datum = emeInformed.GeomStanDev(),
-                Datum2 = emeUninformed.GeomStanDev(),
-                Datum3 = emePdInformed.GeomStanDev()
-            });
+            Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
+                Tuple.Create("GM (90% CrI)", new ExposureMetricFunc(e => e.GeomMean())),
+                Tuple.Create("GSD (90% CrI)", new ExposureMetricFunc(e => e.GeomStanDev())),
+                Tuple.Create("Exceedance fraction (%)(90 % CrI)", new ExposureMetricFunc(e => e.ExceedanceFrac())),
+                Tuple.Create("95th percentile (90% CrI)", new ExposureMetricFunc(e => e.P95())),
+                Tuple.Create("Overexposure risk (%, P95)", new ExposureMetricFunc(e => e.OverExposureRisk())),
+                Tuple.Create("AM (90% CrI)", new ExposureMetricFunc(e => e.ArithMean())),
+                Tuple.Create("Overexposure risk (%, AM)", new ExposureMetricFunc(e => e.OverExposureRisk(false))),
+            };
 
-            tableData.Add(new TableEntry()
+            foreach (Tuple<string, ExposureMetricFunc> t in tuples)
             {
-                Title = "Exceedance fraction (%)(90 % CrI)",
-                Datum = emeInformed.ExceedanceFrac(),
-                Datum2 = emeUninformed.ExceedanceFrac(),
-                Datum3 = emePdInformed.ExceedanceFrac()
-            });
+                tableData.Add(emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
+            }
 
-            tableData.Add(new TableEntry()
-            {
-                Title = "95th percentile (90% CrI)",
-                Datum = emeInformed.P95(),
-                Datum2 = emeUninformed.P95(),
-                Datum3 = emePdInformed.P95()
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "Overexposure risk (%, P95)",
-                Datum = emeInformed.OverExposureRisk(),
-                Datum2 = emeUninformed.OverExposureRisk(),
-                Datum3 = emePdInformed.OverExposureRisk()
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "AM (90% CrI)",
-                Datum = emeInformed.ArithMean(),
-                Datum2 = emeUninformed.ArithMean(),
-                Datum3 = emePdInformed.ArithMean()
-            });
-
-            tableData.Add(new TableEntry()
-            {
-                Title = "Overexposure risk (%, AM)",
-                Datum = emeInformed.OverExposureRisk(false),
-                Datum2 = emeUninformed.OverExposureRisk(false),
-                Datum3 = emePdInformed.OverExposureRisk(false)
-            });
             return tableData;
         }
     }
