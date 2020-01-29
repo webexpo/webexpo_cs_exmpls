@@ -53,10 +53,10 @@ namespace IrsstReportTables
 
             BWModelParameters bwParams = BWModelParameters.GetDefaults(true);
             ExposureMetricEstimates eme1 = new ExposureMetricEstimates(
-                                            new BetweenWorkerModel(measures: new MeasureList(workerMeasures: lowWWCorrMeas, oel: 100),
+                                            new BetweenWorkerModel(measures: new MeasureList(workerMeasures: lowWWCorrMeas, oel: 150),
                                                                    specificParams: bwParams));
             ExposureMetricEstimates eme2 = new ExposureMetricEstimates(
-                                            new BetweenWorkerModel(measures: new MeasureList(workerMeasures: highWWCorrMeas, oel: 100),
+                                            new BetweenWorkerModel(measures: new MeasureList(workerMeasures: highWWCorrMeas, oel: 150),
                                                                    specificParams: bwParams));
 
             Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {

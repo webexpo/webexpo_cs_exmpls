@@ -175,7 +175,8 @@ namespace IrsstReportTables
 
             for (int i = 0; i < SigmaChain.Length; i++)
             {
-                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log((Oel)) : Oel) - MuChain[i] - NormalDistribution.QNorm(TargetPerc / 100) * SigmaWithinChain[i]) / SigmaChain[i]));
+                double qn = NormalDistribution.QNorm(TargetPerc / 100);
+                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log(Oel) : Oel) - MuChain[i] - qn * SigmaWithinChain[i]) / SigmaChain[i]));
             }
             return chain;
         }
@@ -186,7 +187,7 @@ namespace IrsstReportTables
 
             for (int i = 0; i < SigmaChain.Length; i++)
             {
-                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? (Math.Log(Oel) - 0.5 * Math.Pow(SigmaWithinChain[i], 2)) : Oel) - MuChain[i]) / SigmaChain[i]));
+                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log(Oel) : Oel) - MuChain[i] - 0.5 * Math.Pow(SigmaWithinChain[i], 2)) / SigmaChain[i]));
             }
 
             return chain;
