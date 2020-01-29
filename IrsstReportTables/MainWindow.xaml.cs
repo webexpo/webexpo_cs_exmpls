@@ -1,19 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Zygotine.WebExpo;
-using System.Globalization;
 
 namespace IrsstReportTables
 {
@@ -23,12 +12,14 @@ namespace IrsstReportTables
     {
         MeasureList ml;
         bool logNormDist;
-        NumberFormatInfo nfi;
-
+        
         public MainWindow()
         {
             InitializeComponent();
-            Init();
+            //Init();
+            Window bww = new BetweenWorkerWindow();
+            bww.Show();
+            bww.Activate();
         }
 
         void Init()
@@ -36,9 +27,7 @@ namespace IrsstReportTables
             this.ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },
                                       oel: 100);
             this.logNormDist = true;
-            this.nfi = new NumberFormatInfo();
-            this.nfi.NumberDecimalSeparator = ".";
-
+            
             Table3.ItemsSource = LoadTable3Data();
             Table4.ItemsSource = LoadTable4Data();
             Table5.ItemsSource = LoadTable5Data();

@@ -12,8 +12,10 @@ namespace IrsstReportTables
     {
         double Oel { get; set; }
         bool LogNormDist { get; set; } = true;
+        double TargetPerc { get; set; } = 95;
         double[] MuChain { get; set; }
         double[] SigmaChain { get; set; }
+        double[] SigmaWithinChain { get; set; } = null;
 
         public ExposureMetricEstimates(double oel)
         {
@@ -28,8 +30,14 @@ namespace IrsstReportTables
                 LogNormDist = m.OutcomeIsLogNormallyDistributed;
 
                 m.Compute();
-                MuChain = m.Result.GetChainByName("muSample");
-                SigmaChain = m.Result.GetChainByName("sdSample");
+
+                bool isBWModel = m.GetType() == typeof(BetweenWorkerModel);
+                MuChain = m.Result.GetChainByName("mu" + (isBWModel ? "Overall" : "") + "Sample");
+                SigmaChain = m.Result.GetChainByName(isBWModel ? "sigmaBetweenSample" : "sdOverall");
+                if ( isBWModel )
+                {
+                    SigmaWithinChain = m.Result.GetChainByName("sigmaWithinSample");
+                }
             }
         }
 
@@ -38,9 +46,10 @@ namespace IrsstReportTables
             return new PointEstimateWInterval(MuChain.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>());
         }
 
-        public TableEntryData GeomStanDev()
+        public TableEntryData GeomStanDev(bool useDefaultSigma = true)
         {
-            return new PointEstimateWInterval(SigmaChain.Select(sd => LogNormDist ? Math.Exp(sd) : sd).ToArray<double>());
+            double[] sdChain = useDefaultSigma ? SigmaChain : SigmaWithinChain;
+            return new PointEstimateWInterval(sdChain.Select(sd => LogNormDist ? Math.Exp(sd) : sd).ToArray<double>());
         }
 
         public TableEntryData ExceedanceFrac(bool addOverExpo = false)
@@ -68,6 +77,50 @@ namespace IrsstReportTables
             return new PointEstimateWInterval(chain: amc, overexpo: OverExposureRisk(addOverExpo ? amc : null));
         }
 
+        public TableEntryData Rho()
+        {
+            double[] rhoChain = RhoChain();
+            return new PointEstimateWInterval(rhoChain);
+        }
+
+        public TableEntryData RRatio()
+        {
+            double[] rhoChain = RRatioChain();
+            return new PointEstimateWInterval(rhoChain);
+        }
+
+        public TableEntryData IndivOverexpoP95()
+        {
+            double[] ioChain = IndivOverexpoP95Chain();
+            return new PointEstimateWInterval(ioChain);
+        }
+
+        public TableEntryData IndivOverexpoAm()
+        {
+            double[] ioChain = IndivOverexpoAmChain();
+            return new PointEstimateWInterval(ioChain);
+        }
+
+        public TableEntryData RhoProbGt(double p)
+        {
+            return new OverExposureRiskPercentage((double) OverExposureRisk(RhoChain(), p, false));
+        }
+
+        public TableEntryData RRatioProbGt(double p)
+        {
+            return new OverExposureRiskPercentage((double)OverExposureRisk(RRatioChain(), p, false));
+        }
+
+        public TableEntryData IndivOverexpoP95ProbGt(double p)
+        {
+            return new OverExposureRiskPercentage((double)OverExposureRisk(IndivOverexpoP95Chain(), p, false));
+        }
+
+        public TableEntryData IndivOverexpoAmProbGt(double p)
+        {
+            return new OverExposureRiskPercentage((double)OverExposureRisk(IndivOverexpoAmChain(), p, false));
+        }
+
         public TableEntryData BandProbabilities(bool p95 = true)
         {
             return new AihaBandProbabilities(p95 ? P95Chain() : AmChain(), Oel);
@@ -75,7 +128,6 @@ namespace IrsstReportTables
 
         double[] P95Chain()
         {
-            double TargetPerc = 95;
             double[] p95Chain = new double[MuChain.Length];
             for (int i = 0; i < p95Chain.Length; i++)
             {
@@ -97,6 +149,49 @@ namespace IrsstReportTables
             return amc;
         }
 
+        double[] RhoChain()
+        {
+            double[] rhoChain = new double[SigmaChain.Length];
+            for (int i = 0; i < SigmaChain.Length; i++)
+            {
+                rhoChain[i] = Math.Pow(SigmaChain[i], 2) / (Math.Pow(SigmaChain[i], 2) + Math.Pow(SigmaWithinChain[i], 2));
+            }
+            return rhoChain;
+        }
+
+        double[] RRatioChain(double rbRatioCoverage = 80)
+        {
+            double[] chain = new double[SigmaChain.Length];
+            for (int i = 0; i < SigmaChain.Length; i++)
+            {
+                chain[i] = Math.Exp(2 * NormalDistribution.QNorm(1 - (100 - rbRatioCoverage) / 200) * SigmaChain[i]);
+            }
+            return chain;
+        }
+
+        double[] IndivOverexpoP95Chain()
+        {
+            double[] chain = new double[SigmaChain.Length];
+
+            for (int i = 0; i < SigmaChain.Length; i++)
+            {
+                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log((Oel)) : Oel) - MuChain[i] - NormalDistribution.QNorm(TargetPerc / 100) * SigmaWithinChain[i]) / SigmaChain[i]));
+            }
+            return chain;
+        }
+
+        double[] IndivOverexpoAmChain()
+        {
+            double[] chain = new double[SigmaChain.Length];
+
+            for (int i = 0; i < SigmaChain.Length; i++)
+            {
+                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? (Math.Log(Oel) - 0.5 * Math.Pow(SigmaWithinChain[i], 2)) : Oel) - MuChain[i]) / SigmaChain[i]));
+            }
+
+            return chain;
+        }
+
         public TableEntryData OverExposureRisk(bool p95 = true)
         {
             double[] chain = p95 ? P95Chain() : AmChain();
@@ -112,7 +207,8 @@ namespace IrsstReportTables
                 {
                     limit *= Oel;
                 }
-                return (double)100 * chain.Where(p => p > limit).ToArray<double>().Length / chain.Length;
+                int count = chain.Where(p => p > limit).ToArray<double>().Length;
+                return (double)100 * count / chain.Length;
             }
 
             return null;

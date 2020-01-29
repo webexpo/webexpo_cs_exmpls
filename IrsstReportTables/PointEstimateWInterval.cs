@@ -32,7 +32,8 @@ namespace IrsstReportTables
         private double GeomMean(double[] chain)
         {
             Array.Sort(chain);
-            return chain[chain.Length / 2];
+            double mean = chain[chain.Length / 2];
+            return mean;
         }
     }
 }
