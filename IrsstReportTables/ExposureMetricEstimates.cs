@@ -17,7 +17,7 @@ namespace IrsstReportTables
         double[] MuChain { get; set; }
         double[] SigmaChain { get; set; }
         double[] SigmaWithinChain { get; set; } = null;
-        ModelResult ModResult = null;
+        public BetweenWorkerModel BWModel { get; set; } = null;
         string[] WorkerIds = null;
 
         public ExposureMetricEstimates(double oel)
@@ -38,7 +38,7 @@ namespace IrsstReportTables
                 string muMidStr = "";
                 if (isBWModel)
                 {
-                    ModResult = m.Result;
+                    BWModel = (BetweenWorkerModel) m;
                     WorkerIds = m.Measures.WorkerTags;
                     SigmaWithinChain = m.Result.GetChainByName("sigmaWithinSample");
                     muMidStr = "Overall";
@@ -223,44 +223,39 @@ namespace IrsstReportTables
         }
 
 
-        public string MostExposedWorker()
+        Tuple<string, double> FindExposed(bool findMostExposed)
         {
-            double maxGM = Double.NegativeInfinity;
-            string most = null;
+            double currGM = findMostExposed ? Double.NegativeInfinity : Double.PositiveInfinity;
+            string exposedWid = null;
             foreach ( string wId in WorkerIds )
             {
-                double gMean = PointEstimateWInterval.GeomMean(ModResult.GetChainByName(string.Format("mu_{0}Sample", wId)));
-                if ( gMean > maxGM )
+                double gMean = PointEstimateWInterval.GeomMean(BWModel.Result.GetChainByName(string.Format("mu_{0}Sample", wId)));
+                if ( findMostExposed ? gMean > currGM : gMean < currGM )
                 {
-                    maxGM = gMean;
-                    most = wId;
+                    currGM = gMean;
+                    exposedWid = wId;
                 }
             }
 
-            return most;
+            return Tuple.Create(exposedWid, currGM);
         }
 
-        public string LeastExposedWorker()
+        public string FindExposedWorker(bool findMostExposed = true)
         {
-            double minGM = Double.PositiveInfinity;
-            string least = null;
-            foreach (string wId in WorkerIds)
-            {
-                double gMean = PointEstimateWInterval.GeomMean(ModResult.GetChainByName(string.Format("mu_{0}Sample", wId)));
-                if (gMean < minGM)
-                {
-                    minGM = gMean;
-                    least = wId;
-                }
-            }
+            return FindExposed(findMostExposed).Item1;
+        }
 
-            return least;
+        public string FindExposedWorker(bool findMostExposed, out double gm)
+        {
+            Tuple<string,double> t = FindExposed(findMostExposed);
+            gm = t.Item2;
+            return t.Item1;
         }
 
         public ExposureMetricEstimates GetWorkerEstimates(string workerId)
         {
             ExposureMetricEstimates workerEst = (ExposureMetricEstimates) this.Clone();
-            workerEst.MuChain = ModResult.GetChainByName(string.Format("mu_{0}Sample", workerId));
+            workerEst.MuChain = BWModel.Result.GetChainByName(string.Format("mu_{0}Sample", workerId));
             return workerEst;
         }
 
@@ -279,7 +274,7 @@ namespace IrsstReportTables
                 SigmaWithinChain.CopyTo(clone.SigmaWithinChain, 0);
             }
             
-            clone.ModResult = ModResult;
+            clone.BWModel = BWModel;
             if ( WorkerIds != null )
             {
                 clone.WorkerIds = new string[WorkerIds.Length];
