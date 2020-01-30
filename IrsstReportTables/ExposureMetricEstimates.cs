@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Zygotine.WebExpo;
 using Zygotine.Statistics.Distribution;
 
+
 namespace IrsstReportTables
 {
-    public class ExposureMetricEstimates
+    public class ExposureMetricEstimates : ICloneable
     {
         double Oel { get; set; }
         bool LogNormDist { get; set; } = true;
@@ -16,6 +17,8 @@ namespace IrsstReportTables
         double[] MuChain { get; set; }
         double[] SigmaChain { get; set; }
         double[] SigmaWithinChain { get; set; } = null;
+        ModelResult ModResult = null;
+        string[] WorkerIds = null;
 
         public ExposureMetricEstimates(double oel)
         {
@@ -32,12 +35,16 @@ namespace IrsstReportTables
                 m.Compute();
 
                 bool isBWModel = m.GetType() == typeof(BetweenWorkerModel);
-                MuChain = m.Result.GetChainByName("mu" + (isBWModel ? "Overall" : "") + "Sample");
-                SigmaChain = m.Result.GetChainByName(isBWModel ? "sigmaBetweenSample" : "sdOverall");
-                if ( isBWModel )
+                string muMidStr = "";
+                if (isBWModel)
                 {
+                    ModResult = m.Result;
+                    WorkerIds = m.Measures.WorkerTags;
                     SigmaWithinChain = m.Result.GetChainByName("sigmaWithinSample");
+                    muMidStr = "Overall";
                 }
+                MuChain = m.Result.GetChainByName("mu" + muMidStr + "Sample");
+                SigmaChain = m.Result.GetChainByName(isBWModel ? "sigmaBetweenSample" : "sdOverall");
             }
         }
 
@@ -215,5 +222,70 @@ namespace IrsstReportTables
             return null;
         }
 
+
+        public string MostExposedWorker()
+        {
+            double maxGM = Double.NegativeInfinity;
+            string most = null;
+            foreach ( string wId in WorkerIds )
+            {
+                double gMean = PointEstimateWInterval.GeomMean(ModResult.GetChainByName(string.Format("mu_{0}Sample", wId)));
+                if ( gMean > maxGM )
+                {
+                    maxGM = gMean;
+                    most = wId;
+                }
+            }
+
+            return most;
+        }
+
+        public string LeastExposedWorker()
+        {
+            double minGM = Double.PositiveInfinity;
+            string least = null;
+            foreach (string wId in WorkerIds)
+            {
+                double gMean = PointEstimateWInterval.GeomMean(ModResult.GetChainByName(string.Format("mu_{0}Sample", wId)));
+                if (gMean < minGM)
+                {
+                    minGM = gMean;
+                    least = wId;
+                }
+            }
+
+            return least;
+        }
+
+        public ExposureMetricEstimates GetWorkerEstimates(string workerId)
+        {
+            ExposureMetricEstimates workerEst = (ExposureMetricEstimates) this.Clone();
+            workerEst.MuChain = ModResult.GetChainByName(string.Format("mu_{0}Sample", workerId));
+            return workerEst;
+        }
+
+        public Object Clone()
+        {
+            ExposureMetricEstimates clone = new ExposureMetricEstimates(Oel);
+            clone.LogNormDist = LogNormDist;
+            clone.TargetPerc = TargetPerc;
+            clone.MuChain = new double[MuChain.Length];
+            MuChain.CopyTo(clone.MuChain, 0);
+            clone.SigmaChain = new double[SigmaChain.Length];
+            SigmaChain.CopyTo(clone.SigmaChain, 0);
+            if ( SigmaWithinChain != null )
+            {
+                clone.SigmaWithinChain = new double[SigmaWithinChain.Length];
+                SigmaWithinChain.CopyTo(clone.SigmaWithinChain, 0);
+            }
+            
+            clone.ModResult = ModResult;
+            if ( WorkerIds != null )
+            {
+                clone.WorkerIds = new string[WorkerIds.Length];
+                WorkerIds.CopyTo(clone.WorkerIds, 0);
+            }
+            return clone;
+        }
     }
 }

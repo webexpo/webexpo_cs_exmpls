@@ -26,10 +26,19 @@ namespace IrsstReportTables
 
         public override string ToString()
         {
-            return String.Format(this.nfi, "{0} [{1} - {2}]{3}", ToSignificantDigits(Estimate), ToSignificantDigits(IntervalLowerBound), ToSignificantDigits(IntervalUpperBound), OverExpoInfo);
+            string str;
+            if (Estimate < 0.001)
+            {
+                str = String.Format(this.nfi, "{0:E2} [{1} - {2}]{3}", Estimate, ToSignificantDigits(IntervalLowerBound), ToSignificantDigits(IntervalUpperBound), OverExpoInfo);
+            }
+            else
+            {
+                str = String.Format(this.nfi, "{0} [{1} - {2}]{3}", ToSignificantDigits(Estimate), ToSignificantDigits(IntervalLowerBound), ToSignificantDigits(IntervalUpperBound), OverExpoInfo);
+            }
+            return str;
         }
 
-        private double GeomMean(double[] chain)
+        public static double GeomMean(double[] chain)
         {
             Array.Sort(chain);
             double mean = chain[chain.Length / 2];

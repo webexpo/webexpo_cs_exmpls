@@ -17,7 +17,7 @@ namespace IrsstReportTables
 
         public override string ToString()
         {
-            return string.Format("{0}%", ToSignificantDigits(Risk, 2));
+            return string.Format("{0}%", ToSignificantDigits(Risk,2));
         }
     }
 }

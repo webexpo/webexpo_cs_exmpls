@@ -59,6 +59,10 @@ namespace IrsstReportTables
                                             new BetweenWorkerModel(measures: new MeasureList(workerMeasures: highWWCorrMeas, oel: 150),
                                                                    specificParams: bwParams));
 
+            string w1 = eme1.MostExposedWorker();
+            
+            TableEntryData ted = eme1.GetWorkerEstimates(w1).GeomMean();
+
             Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
                 Tuple.Create("Group GM (90% CrI)", new ExposureMetricFunc(e => e.GeomMean())),
                 Tuple.Create("Between-worker GSD (90% CrI)", new ExposureMetricFunc(e => e.GeomStanDev())),
