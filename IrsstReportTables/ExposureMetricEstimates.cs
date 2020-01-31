@@ -14,11 +14,12 @@ namespace IrsstReportTables
         double Oel { get; set; }
         bool LogNormDist { get; set; } = true;
         double TargetPerc { get; set; } = 95;
-        double[] MuChain { get; set; }
+        public double[] MuChain { get; set; }
         double[] SigmaChain { get; set; }
         double[] SigmaWithinChain { get; set; } = null;
         public BetweenWorkerModel BWModel { get; set; } = null;
         string[] WorkerIds = null;
+        bool WorkerEstimates { get; set; } = false;
 
         public ExposureMetricEstimates(double oel)
         {
@@ -51,6 +52,23 @@ namespace IrsstReportTables
         public TableEntryData GeomMean()
         {
             return new PointEstimateWInterval(MuChain.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>());
+        }
+
+        public TableEntryData GeomMean(double[] MuOverall)
+        {
+            double[] muC = new double[MuOverall.Length];
+            MuChain.CopyTo(muC, 0);
+            if (WorkerEstimates)
+            {
+                for (int i = 0; i < muC.Length; i++)
+                {
+                    double delta = -Math.Log(Oel);
+                    delta += MuOverall[i];
+                    muC[i] += delta;
+                }
+            }
+
+            return new PointEstimateWInterval(muC.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>());
         }
 
         public TableEntryData GeomStanDev(bool useDefaultSigma = true)
@@ -256,6 +274,7 @@ namespace IrsstReportTables
         {
             ExposureMetricEstimates workerEst = (ExposureMetricEstimates) this.Clone();
             workerEst.MuChain = BWModel.Result.GetChainByName(string.Format("mu_{0}Sample", workerId));
+            workerEst.WorkerEstimates = true;
             return workerEst;
         }
 

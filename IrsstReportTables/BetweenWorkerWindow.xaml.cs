@@ -12,17 +12,20 @@ namespace IrsstReportTables
     /// </summary>
     public partial class BetweenWorkerWindow : Window
     {
+        ExposureMetricEstimates EmeLowWWCorr;
+        ExposureMetricEstimates EmeHighWWCorr;
+
         public BetweenWorkerWindow()
         {
             InitializeComponent();
+            Init();
 
             Table6.ItemsSource = LoadTable6Data();
+            Table7.ItemsSource = LoadTable7Data();
         }
 
-        private List<TableEntry> LoadTable6Data()
+        private void Init()
         {
-            List<TableEntry> tableData = new List<TableEntry>();
-
             Dictionary<string, double[]> lowWWCorrMeas = new Dictionary<string, double[]>
             {
                 {"worker-01", new double[]{ 185, 34.8, 16.7, 12.4, 18.6, 47.4, 52.6, 15.3, 27.6, 26.3 } },
@@ -52,29 +55,17 @@ namespace IrsstReportTables
             };
 
             BWModelParameters bwParams = BWModelParameters.GetDefaults(true);
-            ExposureMetricEstimates emeLow = new ExposureMetricEstimates(
+            EmeLowWWCorr = new ExposureMetricEstimates(
                                             new BetweenWorkerModel(measures: new MeasureList(workerMeasures: lowWWCorrMeas, oel: 150),
                                                                    specificParams: bwParams));
-            ExposureMetricEstimates emeHigh = new ExposureMetricEstimates(
+            EmeHighWWCorr = new ExposureMetricEstimates(
                                             new BetweenWorkerModel(measures: new MeasureList(workerMeasures: highWWCorrMeas, oel: 150),
                                                                    specificParams: bwParams));
+        }
 
-            foreach ( string wid in emeLow.BWModel.Measures.WorkerTags )
-            {
-                ExposureMetricEstimates e = emeLow.GetWorkerEstimates(wid);
-                ExposureMetricEstimates emeLow2 = (ExposureMetricEstimates) emeLow.Clone();
-                TableEntryData te1 = emeLow.GeomMean();
-                TableEntryData te2 = emeLow.GeomMean();
-                TableEntryData teW = e.GeomMean();
-            }
-            double lowWWCorrLowestGm, lowWWCorrHighestGm, highWWCorrLowestGm, highWWCorrHighestGm;
-            string widLowWWCorrLeastExpo = emeLow.FindExposedWorker(findMostExposed: false, gm: out lowWWCorrLowestGm);
-
-            TableEntryData ted = emeLow.GetWorkerEstimates(widLowWWCorrLeastExpo).GeomMean();
-
-            string widLowWWCorrMostExpo = emeLow.FindExposedWorker(findMostExposed: true, gm: out lowWWCorrHighestGm);
-            string widHighWWCorrLeastExpo = emeHigh.FindExposedWorker(findMostExposed: false, gm: out highWWCorrLowestGm);
-            string widHighWWCorrMostExpo = emeHigh.FindExposedWorker(findMostExposed: true, gm: out highWWCorrHighestGm);
+        private List<TableEntry> LoadTable6Data()
+        {
+            List<TableEntry> tableData = new List<TableEntry>();
 
             Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
                 Tuple.Create("Group GM (90% CrI)", new ExposureMetricFunc(e => e.GeomMean())),
@@ -91,7 +82,40 @@ namespace IrsstReportTables
                 Tuple.Create("Chances that the above probability is >20%", new ExposureMetricFunc(e => e.IndivOverexpoAmProbGt(20))),
             };
 
-            ExposureMetricEstimates[] emes = new ExposureMetricEstimates[] { emeLow, emeHigh };
+            ExposureMetricEstimates[] emes = new ExposureMetricEstimates[] { EmeLowWWCorr, EmeHighWWCorr };
+            foreach (Tuple<string, ExposureMetricFunc> t in tuples)
+            {
+                tableData.Add(emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
+            }
+
+            return tableData;
+        }
+
+        private List<TableEntry> LoadTable7Data()
+        {
+            List<TableEntry> tableData = new List<TableEntry>();
+
+            double lowWWCorrLowestGm, lowWWCorrHighestGm, highWWCorrLowestGm, highWWCorrHighestGm;
+
+            string widLowWWCorrLeastExpo = EmeLowWWCorr.FindExposedWorker(findMostExposed: false, gm: out lowWWCorrLowestGm);
+            string widLowWWCorrMostExpo = EmeLowWWCorr.FindExposedWorker(findMostExposed: true, gm: out lowWWCorrHighestGm);
+            ExposureMetricEstimates emeLowLeast = EmeLowWWCorr.GetWorkerEstimates(widLowWWCorrLeastExpo);
+            ExposureMetricEstimates emeLowMost = EmeLowWWCorr.GetWorkerEstimates(widLowWWCorrMostExpo);
+
+            string widHighWWCorrLeastExpo = EmeHighWWCorr.FindExposedWorker(findMostExposed: false, gm: out highWWCorrLowestGm);
+            string widHighWWCorrMostExpo = EmeHighWWCorr.FindExposedWorker(findMostExposed: true, gm: out highWWCorrHighestGm);
+            ExposureMetricEstimates emeHighLeast = EmeHighWWCorr.GetWorkerEstimates(widHighWWCorrLeastExpo);
+            ExposureMetricEstimates emeHighMost = EmeHighWWCorr.GetWorkerEstimates(widHighWWCorrMostExpo);
+
+            Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
+                Tuple.Create("GM", new ExposureMetricFunc(e => e.GeomMean(EmeLowWWCorr.MuChain))),
+                Tuple.Create("GSD", new ExposureMetricFunc(e => e.GeomStanDev())),
+                Tuple.Create("Exceedance fraction (%)", new ExposureMetricFunc(e => e.ExceedanceFrac())),
+                Tuple.Create("95th percentile", new ExposureMetricFunc(e => e.P95())),
+                Tuple.Create("Arithmetic mean", new ExposureMetricFunc(e => e.ArithMean()))
+            };
+
+            ExposureMetricEstimates[] emes = new ExposureMetricEstimates[] { emeLowLeast, emeLowMost, emeHighLeast, emeHighMost };
             foreach (Tuple<string, ExposureMetricFunc> t in tuples)
             {
                 tableData.Add(emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
