@@ -45,7 +45,7 @@ namespace IrsstReportTables
                     muMidStr = "Overall";
                 }
                 MuChain = m.Result.GetChainByName("mu" + muMidStr + "Sample");
-                SigmaChain = m.Result.GetChainByName(isBWModel ? "sigmaBetweenSample" : "sdOverall");
+                SigmaChain = m.Result.GetChainByName(isBWModel ? "sigmaBetweenSample" : "sdSample");
             }
         }
 
@@ -54,26 +54,9 @@ namespace IrsstReportTables
             return new PointEstimateWInterval(MuChain.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>());
         }
 
-        public TableEntryData GeomMean(double[] MuOverall)
-        {
-            double[] muC = new double[MuOverall.Length];
-            MuChain.CopyTo(muC, 0);
-            if (WorkerEstimates)
-            {
-                for (int i = 0; i < muC.Length; i++)
-                {
-                    double delta = -Math.Log(Oel);
-                    delta += MuOverall[i];
-                    muC[i] += delta;
-                }
-            }
-
-            return new PointEstimateWInterval(muC.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>());
-        }
-
         public TableEntryData GeomStanDev(bool useDefaultSigma = true)
         {
-            double[] sdChain = useDefaultSigma ? SigmaChain : SigmaWithinChain;
+            double[] sdChain = WorkerEstimates || !useDefaultSigma ? SigmaWithinChain : SigmaChain;
             return new PointEstimateWInterval(sdChain.Select(sd => LogNormDist ? Math.Exp(sd) : sd).ToArray<double>());
         }
 
@@ -81,9 +64,10 @@ namespace IrsstReportTables
         {
             double exc = 5;
             double[] fracChain = new double[MuChain.Length];
+            double[] sdChain = WorkerEstimates ? SigmaWithinChain : SigmaChain;
             for (int i = 0; i < fracChain.Length; i++)
             {
-                fracChain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log(Oel) : Oel) - MuChain[i]) / SigmaChain[i]));
+                fracChain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log(Oel) : Oel) - MuChain[i]) / sdChain[i]));
             }
 
             return new PointEstimateWInterval(chain: fracChain, overexpo: OverExposureRisk(addOverExpo ? fracChain : null, exc, false));
@@ -154,9 +138,10 @@ namespace IrsstReportTables
         double[] P95Chain()
         {
             double[] p95Chain = new double[MuChain.Length];
+            double[] sdChain = WorkerEstimates ? SigmaWithinChain : SigmaChain;
             for (int i = 0; i < p95Chain.Length; i++)
             {
-                double k = MuChain[i] + NormalDistribution.QNorm(TargetPerc / 100) * SigmaChain[i];
+                double k = MuChain[i] + NormalDistribution.QNorm(TargetPerc / 100) * sdChain[i];
                 p95Chain[i] = LogNormDist ? Math.Exp(k) : k;
             }
 
@@ -166,9 +151,10 @@ namespace IrsstReportTables
         double[] AmChain()
         {
             double[] amc = new double[MuChain.Length];
+            double[] sdChain = WorkerEstimates ? SigmaWithinChain : SigmaChain;
             for (int i = 0; i < amc.Length; i++)
             {
-                amc[i] = LogNormDist ? Math.Exp(MuChain[i] + 0.5 * Math.Pow(SigmaChain[i], 2)) : MuChain[i];
+                amc[i] = LogNormDist ? Math.Exp(MuChain[i] + 0.5 * Math.Pow(sdChain[i], 2)) : MuChain[i];
             }
 
             return amc;

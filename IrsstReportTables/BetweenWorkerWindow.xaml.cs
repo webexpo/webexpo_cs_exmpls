@@ -108,7 +108,7 @@ namespace IrsstReportTables
             ExposureMetricEstimates emeHighMost = EmeHighWWCorr.GetWorkerEstimates(widHighWWCorrMostExpo);
 
             Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
-                Tuple.Create("GM", new ExposureMetricFunc(e => e.GeomMean(EmeLowWWCorr.MuChain))),
+                Tuple.Create("GM", new ExposureMetricFunc(e => e.GeomMean())),
                 Tuple.Create("GSD", new ExposureMetricFunc(e => e.GeomStanDev())),
                 Tuple.Create("Exceedance fraction (%)", new ExposureMetricFunc(e => e.ExceedanceFrac())),
                 Tuple.Create("95th percentile", new ExposureMetricFunc(e => e.P95())),
