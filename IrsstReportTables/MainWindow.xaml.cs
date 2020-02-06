@@ -17,9 +17,9 @@ namespace IrsstReportTables
         {
             InitializeComponent();
             Init();
-            Window bww = new BetweenWorkerWindow();
-            bww.Show();
-            bww.Activate();
+            //Window bww = new BetweenWorkerWindow();
+            //bww.Show();
+            //bww.Activate();
         }
 
         void Init()
@@ -29,8 +29,8 @@ namespace IrsstReportTables
             this.logNormDist = true;
             
             Table3.ItemsSource = LoadTable3Data();
-            Table4.ItemsSource = LoadTable4Data();
-            Table5.ItemsSource = LoadTable5Data();
+            //Table4.ItemsSource = LoadTable4Data();
+            //Table5.ItemsSource = LoadTable5Data();
         }
 
         private List<TableEntry> LoadTable3Data()

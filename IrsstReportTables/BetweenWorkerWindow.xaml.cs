@@ -22,6 +22,7 @@ namespace IrsstReportTables
 
             Table6.ItemsSource = LoadTable6Data();
             Table7.ItemsSource = LoadTable7Data();
+            Table8.ItemsSource = LoadTable8Data();
         }
 
         private void Init()
@@ -116,6 +117,45 @@ namespace IrsstReportTables
             };
 
             ExposureMetricEstimates[] emes = new ExposureMetricEstimates[] { emeLowLeast, emeLowMost, emeHighLeast, emeHighMost };
+            foreach (Tuple<string, ExposureMetricFunc> t in tuples)
+            {
+                tableData.Add(emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
+            }
+
+            return tableData;
+        }
+
+        private List<TableEntry> LoadTable8Data()
+        {
+            List<TableEntry> tableData = new List<TableEntry>();
+            Dictionary<string, double[]> realisticMeasures = new Dictionary<string, double[]>
+            {
+                {"worker-01", new double[]{ 31, 60.1, 133, 27.1 } },
+                {"worker-02", new double[]{ 61.1, 5.27, 30.4, 31.7 } },
+                {"worker-03", new double[]{ 20.5, 16.5, 15.5, 71.5 } }
+            };
+
+            BWModelParameters bwParams = BWModelParameters.GetDefaults(true);
+            ExposureMetricEstimates eme = new ExposureMetricEstimates(
+                                                new BetweenWorkerModel(measures: new MeasureList(workerMeasures: realisticMeasures, oel: 85),
+                                                                       specificParams: bwParams));
+
+            Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
+                Tuple.Create("Group GM (90% CrI)", new ExposureMetricFunc(e => e.GeomMean())),
+                Tuple.Create("Between-worker GSD (90% CrI)", new ExposureMetricFunc(e => e.GeomStanDev())),
+                Tuple.Create("Within-worker GSD (90% CrI)", new ExposureMetricFunc(e => e.GeomStanDev(false))),
+                Tuple.Create("Within-worker correlation (rho) (90% CrI)", new ExposureMetricFunc(e => e.Rho())),
+                Tuple.Create("Probability that rho>0.2", new ExposureMetricFunc(e => e.RhoProbGt(0.2))),
+                Tuple.Create("R.ratio (+90% CrI)", new ExposureMetricFunc(e => e.RRatio())),
+                Tuple.Create("Probability that R>2", new ExposureMetricFunc(e => e.RRatioProbGt(2))),
+                Tuple.Create("Probability that R>10", new ExposureMetricFunc(e => e.RRatioProbGt(10))),
+                Tuple.Create("Probability of individual overexposure (95th percentile) in % (90% CrI)", new ExposureMetricFunc(e => e.IndivOverexpoP95())),
+                Tuple.Create("Chances that the above probability is >20%", new ExposureMetricFunc(e => e.IndivOverexpoP95ProbGt(20))),
+                Tuple.Create("Probability of individual overexposure (arithmetic mean) in % (90% CrI)", new ExposureMetricFunc(e => e.IndivOverexpoAm())),
+                Tuple.Create("Chances that the above probability is >20%", new ExposureMetricFunc(e => e.IndivOverexpoAmProbGt(20))),
+            };
+
+            ExposureMetricEstimates[] emes = new ExposureMetricEstimates[] { eme };
             foreach (Tuple<string, ExposureMetricFunc> t in tuples)
             {
                 tableData.Add(emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));

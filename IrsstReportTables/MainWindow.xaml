@@ -4,15 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IrsstReportTables"
+        xmlns:cc="clr-namespace:WebExpoExamples"
         mc:Ignorable="d"
         Title="WebExpo C# Examples - IRSST Report" Height="800" Width="920">
     <Grid>
-        <DataGrid Name="Table3" Height="190" Width="810" HorizontalAlignment="Left" Margin="50,75,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="400" AutoGenerateColumns="False">
-            <DataGrid.Columns>
+        <cc:ReportGrid x:Name="Table3" Height="190" Width="810" HorizontalAlignment="Left" Margin="50,75,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="*" AutoGenerateColumns="False">
+            <cc:ReportGrid.Columns>
                 <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
                 <DataGridTextColumn Header = "Point estimates and 90% credible interval" Binding = "{Binding Datum}" />
-            </DataGrid.Columns>
-        </DataGrid>
+            </cc:ReportGrid.Columns>
+        </cc:ReportGrid>
+        
         <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="58" Width="810">
         </TextBlock>
 
