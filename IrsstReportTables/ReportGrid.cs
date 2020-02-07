@@ -15,10 +15,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Zygotine.WebExpo;
 
 
 namespace IrsstReportTables
 {
+    using ExposureMetricFunc = Func<ExposureMetricEstimates, TableEntryData>;
     /// <summary>
     /// Suivez les étapes 1a ou 1b puis 2 pour utiliser ce contrôle personnalisé dans un fichier XAML.
     ///
@@ -63,6 +65,20 @@ namespace IrsstReportTables
             }
         }
 
+        public static readonly DependencyProperty CityProperty = DependencyProperty.Register
+            (
+                 "City",
+                 typeof(string),
+                 typeof(ReportGrid),
+                 new PropertyMetadata(string.Empty)
+            );
+
+        public string City
+        {
+            get { return (string)GetValue(CityProperty); }
+            set { SetValue(CityProperty, value); }
+        }
+
         static ReportGrid()
         {
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportGrid), new FrameworkPropertyMetadata(typeof(ReportGrid)));  
@@ -74,7 +90,7 @@ namespace IrsstReportTables
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
         }
-
+            
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
