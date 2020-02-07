@@ -63,6 +63,9 @@
     <Compile Include="OverExposureRiskPercentage.cs" />
     <Compile Include="PointEstimateWInterval.cs" />
     <Compile Include="ReportGrid.cs" />
+    <Compile Include="Table3Grid.cs" />
+    <Compile Include="Table4Grid.cs" />
+    <Compile Include="Table5Grid.cs" />
     <Compile Include="TableEntry.cs" />
     <Compile Include="TableEntryData.cs" />
     <Page Include="BetweenWorkerWindow.xaml">

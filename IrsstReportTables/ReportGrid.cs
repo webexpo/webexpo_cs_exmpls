@@ -21,79 +21,40 @@ using Zygotine.WebExpo;
 namespace IrsstReportTables
 {
     using ExposureMetricFunc = Func<ExposureMetricEstimates, TableEntryData>;
-    /// <summary>
-    /// Suivez les étapes 1a ou 1b puis 2 pour utiliser ce contrôle personnalisé dans un fichier XAML.
-    ///
-    /// Étape 1a) Utilisation de ce contrôle personnalisé dans un fichier XAML qui existe dans le projet actif.
-    /// Ajoutez cet attribut XmlNamespace à l'élément racine du fichier de balisage où il doit 
-    /// être utilisé :
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:WebExpoExamples"
-    ///
-    ///
-    /// Étape 1b) Utilisation de ce contrôle personnalisé dans un fichier XAML qui existe dans un autre projet.
-    /// Ajoutez cet attribut XmlNamespace à l'élément racine du fichier de balisage où il doit 
-    /// être utilisé :
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:WebExpoExamples;assembly=WebExpoExamples"
-    ///
-    /// Vous devrez également ajouter une référence du projet contenant le fichier XAML
-    /// à ce projet et regénérer pour éviter des erreurs de compilation :
-    ///
-    ///     Cliquez avec le bouton droit sur le projet cible dans l'Explorateur de solutions, puis sur
-    ///     "Ajouter une référence"->"Projets"->[Recherchez et sélectionnez ce projet]
-    ///
-    ///
-    /// Étape 2)
-    /// Utilisez à présent votre contrôle dans le fichier XAML.
-    ///
-    ///     <MyNamespace:ReportGrid/>
-    ///
-    /// </summary>
-    public class ReportGrid : DataGrid, INotifyPropertyChanged
+
+    public abstract class ReportGrid : DataGrid
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private ObservableCollection<TableEntry> _src = new ObservableCollection<TableEntry>();
-        public ObservableCollection<TableEntry> Source
-        {
-            get { return _src;  }
-            set
-            {
-                this._src = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public static readonly DependencyProperty CityProperty = DependencyProperty.Register
-            (
-                 "City",
-                 typeof(string),
-                 typeof(ReportGrid),
-                 new PropertyMetadata(string.Empty)
-            );
-
-        public string City
-        {
-            get { return (string)GetValue(CityProperty); }
-            set { SetValue(CityProperty, value); }
-        }
-
+        public ObservableCollection<TableEntry> Source { get; set; } = new ObservableCollection<TableEntry>();
+        public ExposureMetricEstimates[] Emes { get; set; }
+       
+        
         static ReportGrid()
         {
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportGrid), new FrameworkPropertyMetadata(typeof(ReportGrid)));  
         }
 
-        public ReportGrid() : base()
+        public ReportGrid(bool skipLoad = false) : base()
         {
-            this.HorizontalAlignment = HorizontalAlignment.Left;
+            this.HorizontalAlignment = HorizontalAlignment.Center;
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
+
+            void Loader(object sender, RoutedEventArgs ev)
+            {
+                foreach ( Tuple<string, ExposureMetricFunc> t in DefineContent() )
+                {
+                    Source.Add(Emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
+                }
+
+                this.ItemsSource = Source;
+            }
+
+            if (!skipLoad)
+            {
+                this.Loaded += Loader;
+            }
         }
-            
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+
+        public abstract Tuple<string, ExposureMetricFunc>[] DefineContent();
     }
 }
