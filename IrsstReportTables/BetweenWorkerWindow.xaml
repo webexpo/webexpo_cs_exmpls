@@ -4,18 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IrsstReportTables"
-        xmlns:cc="clr-namespace:WebExpoExamples"
         mc:Ignorable="d"
         Title="BetweenWorkerWindow" Height="1000" Width="1050">
     <Grid>
         <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="40,10,0,0" TextWrapping="Wrap" Text="Table 6 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses)" VerticalAlignment="Top" Height="42" Width="882" />
-        <cc:ReportGrid x:Name="Table6" HorizontalAlignment="Left" Margin="42,32,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="*" AutoGenerateColumns="False">
-            <cc:ReportGrid.Columns>
+        <DataGrid x:Name="Table6" HorizontalAlignment="Left" Margin="42,32,0,0" VerticalAlignment="Top" RowHeight="20" AutoGenerateColumns="False">
+            <DataGrid.Columns>
                 <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" Width="Auto"/>
                 <DataGridTextColumn Header = "Low within-worker correlation (rho=0.06)" Binding = "{Binding Datum}" Width="Auto"/>
                 <DataGridTextColumn Header = "High within-worker correlation (rho=0.66)" Binding = "{Binding Datum2}" Width="Auto"/>
-            </cc:ReportGrid.Columns>
-        </cc:ReportGrid>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="40,332,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="36" Width="950" ><Run Text="Table "/><Run Text="7"/><Run Text=" - "/><Run Text="Worker-specific exposure metrics point "/><Run Text="estimates and "/><Run Text="credible intervals for the least and most exposed workers in two samples with low and high within-worker correlation"/><Run Text=")"/></TextBlock>
         <DataGrid x:Name="Table7" HorizontalAlignment="Left" Margin="42,355,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="240" AutoGenerateColumns="False">

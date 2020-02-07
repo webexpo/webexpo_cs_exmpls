@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Zygotine.WebExpo;
 
 namespace IrsstReportTables
@@ -12,6 +14,7 @@ namespace IrsstReportTables
     {
         MeasureList ml;
         bool logNormDist;
+        ObservableCollection<TableEntry> hello;
         
         public MainWindow()
         {
@@ -27,15 +30,15 @@ namespace IrsstReportTables
             this.ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },
                                       oel: 100);
             this.logNormDist = true;
-            
+
             Table3.ItemsSource = LoadTable3Data();
-            //Table4.ItemsSource = LoadTable4Data();
+            Table4.ItemsSource = LoadTable4Data();
             //Table5.ItemsSource = LoadTable5Data();
         }
 
-        private List<TableEntry> LoadTable3Data()
+        private ObservableCollection<TableEntry> LoadTable3Data()
         {
-            List<TableEntry> tableData = new List<TableEntry>();
+            ObservableCollection<TableEntry> tableData = new ObservableCollection<TableEntry>();
 
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
                                             new SEGInformedVarModel(measures: ml, specificParams:

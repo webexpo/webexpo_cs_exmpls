@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
-namespace WebExpoExamples
+namespace IrsstReportTables
 {
     /// <summary>
     /// Suivez les étapes 1a ou 1b puis 2 pour utiliser ce contrôle personnalisé dans un fichier XAML.
@@ -44,8 +46,28 @@ namespace WebExpoExamples
     ///     <MyNamespace:ReportGrid/>
     ///
     /// </summary>
-    public class ReportGrid : DataGrid
+    public class ReportGrid : DataGrid, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private List<TableEntry> source;
+        public List<TableEntry> Source {
+            get
+            {
+                return this.source;
+            }
+            set
+            {
+                this.source = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> Foobar { get; set; }
+
         static ReportGrid()
         {
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportGrid), new FrameworkPropertyMetadata(typeof(ReportGrid)));
@@ -54,10 +76,9 @@ namespace WebExpoExamples
 
         public ReportGrid() : base()
         {
-            foreach ( DataGridColumn c in this.Columns )
-            {
-                c.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-            }
+            this.HorizontalAlignment = HorizontalAlignment.Left;
+            this.IsReadOnly = true;
+            this.AutoGenerateColumns = false;
         }
     }
 }

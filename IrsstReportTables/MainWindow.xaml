@@ -4,37 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IrsstReportTables"
-        xmlns:cc="clr-namespace:WebExpoExamples"
         mc:Ignorable="d"
         Title="WebExpo C# Examples - IRSST Report" Height="800" Width="920">
     <Grid>
-        <cc:ReportGrid x:Name="Table3" Height="190" Width="810" HorizontalAlignment="Left" Margin="50,75,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="*" AutoGenerateColumns="False">
-            <cc:ReportGrid.Columns>
-                <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
-                <DataGridTextColumn Header = "Point estimates and 90% credible interval" Binding = "{Binding Datum}" />
-            </cc:ReportGrid.Columns>
-        </cc:ReportGrid>
+        <local:ReportGrid x:Name="Table3" Margin ="50,75,0,515" ItemsSource="{Binding hello}">
+            <local:ReportGrid.Columns>
+                <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="Point estimates and 90% credible interval" Binding="{Binding Datum}" />
+            </local:ReportGrid.Columns>
+        </local:ReportGrid>
         
         <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="58" Width="810">
         </TextBlock>
 
-        <DataGrid Name="Table4" Height="190" Width="808" HorizontalAlignment="Left" Margin="50,340,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="200" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
-                <DataGridTextColumn Header = "Informedvar" Binding = "{Binding Datum}" />
-                <DataGridTextColumn Header = "Uninformative" Binding = "{Binding Datum2}" />
-                <DataGridTextColumn Header = "Past.data" Binding = "{Binding Datum3}" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <local:ReportGrid x:Name="Table4" Margin="50,340,0,257">
+            <local:ReportGrid.Columns>
+                <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="Informedvar" Binding="{Binding Datum}" />
+                <DataGridTextColumn Header="Uninformative" Binding="{Binding Datum2}" />
+                <DataGridTextColumn Header="Past.data" Binding="{Binding Datum3}" />
+            </local:ReportGrid.Columns>
+        </local:ReportGrid>
         <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,278,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="65" Width="808"><Span><Run Text="Table "/></Span><Span><Run Text="4"/></Span><Run Text=" - Exposure metrics point estimates and credible intervals for "/><Run Text="3"/><Run Text=" choices of prior distribution"/></TextBlock>
         <TextBlock FontSize="22" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,542,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="60" Width="808"><Run Text="Table "/><Run Text="5 "/><Run Text="- Exposure metrics point estimates and credible intervals "/><Run Text="in the presence of measurement error"/></TextBlock>
-        <DataGrid x:Name="Table5" Height="150" Width="808" HorizontalAlignment="Left" Margin="52,602,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="200" AutoGenerateColumns="False">
+        
+        <local:ReportGrid x:Name="Table5" Margin="52,602,0,0" VerticalAlignment="Top">
             <DataGrid.Columns>
-                <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
-                <DataGridTextColumn Header = "No measurement error" Binding = "{Binding Datum}" />
-                <DataGridTextColumn Header = "Known CV (30%)" Binding = "{Binding Datum2}" />
-                <DataGridTextColumn Header = "Unknown CV (15-45%)" Binding = "{Binding Datum3}" />
+                <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="No measurement error" Binding="{Binding Datum}" />
+                <DataGridTextColumn Header="Known CV (30%)" Binding="{Binding Datum2}" />
+                <DataGridTextColumn Header="Unknown CV (15-45%)" Binding="{Binding Datum3}" />
             </DataGrid.Columns>
-        </DataGrid>
+        </local:ReportGrid>
     </Grid>
 </Window>
