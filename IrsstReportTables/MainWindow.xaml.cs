@@ -13,8 +13,6 @@ namespace IrsstReportTables
     public partial class MainWindow : Window
     {
         MeasureList ml;
-        bool logNormDist;
-        ObservableCollection<TableEntry> hello;
         
         public MainWindow()
         {
@@ -29,20 +27,19 @@ namespace IrsstReportTables
         {
             this.ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },
                                       oel: 100);
-            this.logNormDist = true;
 
-            Table3.ItemsSource = LoadTable3Data();
             Table4.ItemsSource = LoadTable4Data();
             //Table5.ItemsSource = LoadTable5Data();
         }
 
-        private ObservableCollection<TableEntry> LoadTable3Data()
+        public void Table3Loader(object sender, RoutedEventArgs ev)
         {
-            ObservableCollection<TableEntry> tableData = new ObservableCollection<TableEntry>();
+            var grid = sender as ReportGrid;
+            ObservableCollection<TableEntry> tableData = grid.Source;
 
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
                                             new SEGInformedVarModel(measures: ml, specificParams:
-                                                SEGInformedVarModelParameters.GetDefaults(this.logNormDist)));
+                                                SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true)));
 
             Tuple<string, ExposureMetricFunc>[] tuples = new Tuple<string, ExposureMetricFunc>[] {
                 Tuple.Create("GM", new ExposureMetricFunc(e => e.GeomMean())),
@@ -59,7 +56,7 @@ namespace IrsstReportTables
                 tableData.Add(new TableEntry { Title = t.Item1 }.Add(t.Item2(eme)));
             }
 
-            return tableData;
+            grid.ItemsSource = tableData;
         }
 
         private List<TableEntry> LoadTable4Data()
@@ -69,17 +66,17 @@ namespace IrsstReportTables
             ExposureMetricEstimates emeInformed = new ExposureMetricEstimates(
                 new SEGInformedVarModel(
                     measures: ml,
-                    specificParams: SEGInformedVarModelParameters.GetDefaults(this.logNormDist)
+                    specificParams: SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true)
                 ) );
             ExposureMetricEstimates emeUninformed = new ExposureMetricEstimates(
                 new SEGUninformativeModel(
                     measures: ml,
-                    specificParams: UninformativeModelParameters.GetDefaults(this.logNormDist)
+                    specificParams: UninformativeModelParameters.GetDefaults(logNormalDstrn: true)
                 ) );
             ExposureMetricEstimates emePdInformed = new ExposureMetricEstimates(
                 new SEGInformedVarModel(
                     measures: ml,
-                    specificParams: SEGInformedVarModelParameters.GetDefaults(this.logNormDist),
+                    specificParams: SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true),
                     pastDataSummary: new PastDataSummary(mean: Math.Log(5), sd: Math.Log(2.4), n: 5)
                 ) );
 
@@ -108,7 +105,7 @@ namespace IrsstReportTables
             List<TableEntry> tableData = new List<TableEntry>();
             double[] measures = new double[] { 96.6, 38.3, 80.8, 15.1, 34, 73.4, 14.5, 64.8, 27.4, 48.7, 43.3, 43.4, 57.8, 94.9, 44.1, 44.3, 62.9, 117, 51.6, 64.7, 50.1, 74.7, 221, 46.8, 84.3, 93.4, 126, 46.9, 29.5, 73.8, 66.9, 61.3, 30.2, 101, 22.6, 191, 29.3, 68, 114, 33.7, 52.5, 118, 49.7, 60.4, 36.6, 55.9, 31.9, 84.3, 75.8, 39.5, 28.3, 56.5, 44.2, 48, 36.6, 70, 37, 72, 48, 66.1, 72.4, 80.9, 69.1, 162, 67.3, 75.2, 40.5, 25.6, 44, 120, 56.3, 42.9, 6.63, 24.9, 40.9, 81, 97.2, 74.7, 79.6, 48.8, 75.3, 54.8, 66.5, 71.3, 28.7, 87.5, 51.9, 19.6, 60.8, 45.9, 46.9, 84.8, 120, 103, 36.7, 92.7, 32.8, 73.8, 214, 65.3 };
             double oel = 100;
-            SEGInformedVarModelParameters modelParams = SEGInformedVarModelParameters.GetDefaults(this.logNormDist);
+            SEGInformedVarModelParameters modelParams = SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true);
 
 
             ExposureMetricEstimates emeNoErr = new ExposureMetricEstimates(

@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 
 namespace IrsstReportTables
 {
@@ -49,29 +51,21 @@ namespace IrsstReportTables
     public class ReportGrid : DataGrid, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName = "")
+
+        private ObservableCollection<TableEntry> _src = new ObservableCollection<TableEntry>();
+        public ObservableCollection<TableEntry> Source
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        private List<TableEntry> source;
-        public List<TableEntry> Source {
-            get
-            {
-                return this.source;
-            }
+            get { return _src;  }
             set
             {
-                this.source = value;
-                NotifyPropertyChanged();
+                this._src = value;
+                OnPropertyChanged();
             }
         }
-
-        public ObservableCollection<string> Foobar { get; set; }
 
         static ReportGrid()
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportGrid), new FrameworkPropertyMetadata(typeof(ReportGrid)));
-            
+            //DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportGrid), new FrameworkPropertyMetadata(typeof(ReportGrid)));  
         }
 
         public ReportGrid() : base()
@@ -79,6 +73,11 @@ namespace IrsstReportTables
             this.HorizontalAlignment = HorizontalAlignment.Left;
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

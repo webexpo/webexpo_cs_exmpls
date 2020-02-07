@@ -51,7 +51,8 @@ namespace IrsstReportTables
 
         public TableEntryData GeomMean()
         {
-            return new PointEstimateWInterval(MuChain.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>());
+            double[] tmpChain = MuChain.Select(mu => LogNormDist ? Math.Exp(mu) : mu).ToArray<double>();
+            return new PointEstimateWInterval(tmpChain);
         }
 
         public TableEntryData GeomStanDev(bool useDefaultSigma = true)

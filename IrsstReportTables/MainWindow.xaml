@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="WebExpo C# Examples - IRSST Report" Height="800" Width="920">
     <Grid>
-        <local:ReportGrid x:Name="Table3" Margin ="50,75,0,515" ItemsSource="{Binding hello}">
+        <local:ReportGrid x:Name="Table3" Margin ="50,75,0,515" Loaded="Table3Loader">
             <local:ReportGrid.Columns>
                 <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="Point estimates and 90% credible interval" Binding="{Binding Datum}" />
