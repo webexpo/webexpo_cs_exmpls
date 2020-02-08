@@ -18,11 +18,6 @@ namespace IrsstReportTables
         public BetweenWorkerWindow()
         {
             InitializeComponent();
-            Init();
-
-            Table6.ItemsSource = LoadTable6Data();
-            Table7.ItemsSource = LoadTable7Data();
-            Table8.ItemsSource = LoadTable8Data();
         }
 
         private void Init()

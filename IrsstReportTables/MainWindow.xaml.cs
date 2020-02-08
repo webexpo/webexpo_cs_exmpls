@@ -15,9 +15,9 @@ namespace IrsstReportTables
         public MainWindow()
         {
             InitializeComponent();
-            //Window bww = new BetweenWorkerWindow();
-            //bww.Show();
-            //bww.Activate();
+            Window bww = new BetweenWorkerWindow();
+            bww.Show();
+            bww.Activate();
         }
     }
 }

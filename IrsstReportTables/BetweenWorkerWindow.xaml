@@ -5,58 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IrsstReportTables"
         mc:Ignorable="d"
-        Title="BetweenWorkerWindow" Height="1000" Width="1050">
+        Title="BetweenWorkerWindow" Height="850" Width="1050">
     <Grid>
-        <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="40,10,0,0" TextWrapping="Wrap" Text="Table 6 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses)" VerticalAlignment="Top" Height="42" Width="882" />
-        <DataGrid x:Name="Table6" HorizontalAlignment="Left" Margin="42,32,0,0" VerticalAlignment="Top" RowHeight="20" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" Width="Auto"/>
-                <DataGridTextColumn Header = "Low within-worker correlation (rho=0.06)" Binding = "{Binding Datum}" Width="Auto"/>
-                <DataGridTextColumn Header = "High within-worker correlation (rho=0.66)" Binding = "{Binding Datum2}" Width="Auto"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <TextBlock FontSize="12" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="40,10,0,0" TextWrapping="Wrap" Text="Table 6 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses)" VerticalAlignment="Top" Height="22" Width="958" />
+        <local:Table6Grid Margin="136,32,45.2,518.6">
+            <local:Table6Grid.Columns>
+                <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" />
+                <DataGridTextColumn Header = "Low within-worker correlation (rho=0.06)" Binding = "{Binding Datum}" />
+                <DataGridTextColumn Header = "High within-worker correlation (rho=0.66)" Binding = "{Binding Datum2}" />
+            </local:Table6Grid.Columns>
+        </local:Table6Grid>
 
-        <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="40,332,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="36" Width="950" ><Run Text="Table "/><Run Text="7"/><Run Text=" - "/><Run Text="Worker-specific exposure metrics point "/><Run Text="estimates and "/><Run Text="credible intervals for the least and most exposed workers in two samples with low and high within-worker correlation"/><Run Text=")"/></TextBlock>
-        <DataGrid x:Name="Table7" HorizontalAlignment="Left" Margin="42,355,0,0" VerticalAlignment="Top" RowHeight="20" ColumnWidth="240" AutoGenerateColumns="False">
-            <DataGrid.Columns>
+        <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="48,308,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="18" Width="950" ><Run Text="Table "/><Run Text="7"/><Run Text=" - "/><Run Text="Worker-specific exposure metrics point "/><Run Text="estimates and "/><Run Text="credible intervals for the least and most exposed workers in two samples with low and high within-worker correlation"/><Run Text=")"/></TextBlock>
+        <local:Table7Grid Margin="109,331,24.2,341.6">
+            <local:Table7Grid.Columns>
                 <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" Width="Auto" />
-                <DataGridTextColumn Header = "Least-exposed worker (rho=0.06)" Binding = "{Binding Datum}" Width="Auto" >
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header = "Most-exposed worker (rho=0.06)" Binding = "{Binding Datum2}" Width="Auto" >
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header = "Least-exposed worker (rho=0.66)" Binding = "{Binding Datum3}" Width="Auto" >
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header = "Most-exposed worker (rho=0.66)" Binding = "{Binding Datum4}" >
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="40,515,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="692" ><Run Text="Table "/><Run Text="8"/><Run Text=" - "/><Run Text="Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses) with realistic sample size"/></TextBlock>
-        <DataGrid x:Name="Table8" HorizontalAlignment="Left" Margin="42,550,0,0" VerticalAlignment="Top" RowHeight="20" AutoGenerateColumns="False">
-            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Least-exposed worker (rho=0.06)" Binding = "{Binding Datum}" />
+                <DataGridTextColumn Header = "Most-exposed worker (rho=0.06)" Binding = "{Binding Datum2}" />
+                <DataGridTextColumn Header = "Least-exposed worker (rho=0.66)" Binding = "{Binding Datum3}" />
+                <DataGridTextColumn Header = "Most-exposed worker (rho=0.66)" Binding = "{Binding Datum4}" />
+            </local:Table7Grid.Columns>
+        </local:Table7Grid>
+
+        <TextBlock FontSize="11" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="10,480,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="17" Width="1009" ><Run Text="Table "/><Run Text="8"/><Run Text=" - "/><Run Text="Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses) with realistic sample size"/></TextBlock>
+        <local:Table8Grid Margin="252,502,142.2,24.6">
+            <local:Table8Grid.Columns>
                 <DataGridTextColumn Header = "Parameter" Binding = "{Binding Title}" Width="Auto" />
                 <DataGridTextColumn Header = "Point estimate and 90% credible interval" Binding = "{Binding Datum}" Width="Auto" />
-            </DataGrid.Columns>
-        </DataGrid>
+            </local:Table8Grid.Columns>
+        </local:Table8Grid>
 
 
     </Grid>
