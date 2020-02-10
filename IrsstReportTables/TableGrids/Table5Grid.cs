@@ -12,7 +12,7 @@ namespace IrsstReportTables
 
         }
 
-        public Table5Grid() : base(skipLoad: true)
+        public Table5Grid() : base(skipLoad: false)
         {
 
         }
