@@ -7,35 +7,35 @@
         mc:Ignorable="d"
         Title="WebExpo C# Examples - IRSST Report" Height="750" Width="920">
     <Grid>
-        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="58" Width="810" />
+        <TextBlock FontSize="14" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="22" Width="894" />
 
-        <local:Table3Grid Margin="239,59,168.6,471.4" >
-            <local:Table3Grid.Columns>
+        <local:Table3Grid Margin="249,35,160,510" >
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="Point estimates and 90% credible interval" Binding="{Binding Datum}" />
-            </local:Table3Grid.Columns>
+            </DataGrid.Columns>
         </local:Table3Grid>
 
-        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,256,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="808"><Span><Run Text="Table "/></Span><Span><Run Text="4"/></Span><Run Text=" - Exposure metrics point estimates and credible intervals for "/><Run Text="3"/><Run Text=" choices of prior distribution"/></TextBlock>
+        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,224,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="808"><Span><Run Text="Table "/></Span><Span><Run Text="4"/></Span><Run Text=" - Exposure metrics point estimates and credible intervals for "/><Run Text="3"/><Run Text=" choices of prior distribution"/></TextBlock>
 
-        <local:Table4Grid Margin="214,284,150.6,253.4">
-            <local:Table4Grid.Columns>
+        <local:Table4Grid Margin="214,252,150.6,292.4">
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="Informedvar" Binding="{Binding Datum}" />
                 <DataGridTextColumn Header="Uninformative" Binding="{Binding Datum2}" />
                 <DataGridTextColumn Header="Past.data" Binding="{Binding Datum3}" />
-            </local:Table4Grid.Columns>
+            </DataGrid.Columns>
         </local:Table4Grid>
 
-        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,474,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="808"><Run Text="Table "/><Run Text="5 "/><Run Text="- Exposure metrics point estimates and credible intervals "/><Run Text="in the presence of measurement error"/></TextBlock>
+        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,446,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="808"><Run Text="Table "/><Run Text="5 "/><Run Text="- Exposure metrics point estimates and credible intervals "/><Run Text="in the presence of measurement error"/></TextBlock>
 
-        <local:Table5Grid Margin="271,502,218.6,20">
-            <local:Table5Grid.Columns>
+        <local:Table5Grid Margin="271,470,218.6,52.4">
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="No measurement error" Binding="{Binding Datum}" />
                 <DataGridTextColumn Header="Known CV (30%)" Binding="{Binding Datum2}" />
                 <DataGridTextColumn Header="Unknown CV (15-45%)" Binding="{Binding Datum3}" />
-            </local:Table5Grid.Columns>
+            </DataGrid.Columns>
         </local:Table5Grid>
     </Grid>
 </Window>
