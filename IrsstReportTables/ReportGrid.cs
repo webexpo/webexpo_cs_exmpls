@@ -35,7 +35,6 @@ namespace IrsstReportTables
 
         public ReportGrid() : base()
         {
-            this.HorizontalAlignment = HorizontalAlignment.Center;
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
 

@@ -14,6 +14,7 @@ namespace IrsstReportTables
     public partial class MainWindow : Window
     {
         ReportGrid CurrReportGrid = null;
+        BackgroundWorker BackWorker = null;
 
         public MainWindow()
         {
@@ -79,9 +80,14 @@ namespace IrsstReportTables
                 TablePlaceholder.Children.RemoveAt(0);
             }
 
-            BackgroundWorker BackWorker = new BackgroundWorker();
+            if ( BackWorker != null && BackWorker.IsBusy )
+            {
+                BackWorker.CancelAsync();
+            }
+            BackWorker = new BackgroundWorker();
             BackWorker.DoWork += CurrReportGrid.Load;
             BackWorker.RunWorkerCompleted += TableLoaded;
+            BackWorker.WorkerSupportsCancellation = true;
             BackWorker.RunWorkerAsync();
         }
  
@@ -89,7 +95,6 @@ namespace IrsstReportTables
         {
             CurrReportGrid.ItemsSource = CurrReportGrid.Source;
             TablePlaceholder.Children.Add(CurrReportGrid);
-            TablePlaceholder.Height = CurrReportGrid.Height + 5;
             Spinner.Visibility = Visibility.Hidden;
             TablePlaceholder.Visibility = Visibility.Visible;
         }
