@@ -16,7 +16,9 @@ namespace IrsstReportTables
         {
             return new string[] {
                 "Parameter",
-                "Point estimates and 90 % credible interval"
+                "Informedvar",
+                "Uninformative",
+                "Past.data"
             };
         }
         public override string Description()

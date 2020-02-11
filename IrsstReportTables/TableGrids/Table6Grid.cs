@@ -24,7 +24,8 @@ namespace IrsstReportTables
         {
             return new string[] {
                 "Parameter",
-                "Point estimates and 90 % credible interval"
+                "Low within-worker correlation (rho=0.06)",
+                "High within-worker correlation (rho=0.66)"
             };
         }
         public override string Description()

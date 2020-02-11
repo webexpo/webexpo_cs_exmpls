@@ -21,7 +21,7 @@ namespace IrsstReportTables
         {
             return new string[] {
                 "Parameter",
-                "Point estimates and 90 % credible interval"
+                "Point estimates and 90% credible interval"
             };
         }
 

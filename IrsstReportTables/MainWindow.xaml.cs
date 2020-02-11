@@ -7,11 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using Zygotine.WebExpo;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace IrsstReportTables
 {
-    using ExposureMetricFunc = Func<ExposureMetricEstimates, TableEntryData>;
-
     public partial class MainWindow : Window
     {
         ReportGrid CurrReportGrid = null;
@@ -73,16 +72,26 @@ namespace IrsstReportTables
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Spinner.Visibility = Visibility.Visible;
+            TablePlaceholder.Visibility = Visibility.Hidden;
 
             if (TablePlaceholder.Children.Count > 0)
             {
                 TablePlaceholder.Children.RemoveAt(0);
             }
 
-            CurrReportGrid.Load();
-            TablePlaceholder.Children.Add(CurrReportGrid);
-            Spinner.Visibility = Visibility.Hidden;
+            BackgroundWorker BackWorker = new BackgroundWorker();
+            BackWorker.DoWork += CurrReportGrid.Load;
+            BackWorker.RunWorkerCompleted += TableLoaded;
+            BackWorker.RunWorkerAsync();
         }
  
+        private void TableLoaded(object sender, RunWorkerCompletedEventArgs e)
+        {
+            CurrReportGrid.ItemsSource = CurrReportGrid.Source;
+            TablePlaceholder.Children.Add(CurrReportGrid);
+            TablePlaceholder.Height = CurrReportGrid.Height + 5;
+            Spinner.Visibility = Visibility.Hidden;
+            TablePlaceholder.Visibility = Visibility.Visible;
+        }
     }
 }

@@ -21,7 +21,9 @@ namespace IrsstReportTables
         {
             return new string[] {
                 "Parameter",
-                "Point estimates and 90 % credible interval"
+                "No measurement error",
+                "Known CV (30%)",
+                "Unknown CV (15-45%)"
             };
         }
         public override string Description()

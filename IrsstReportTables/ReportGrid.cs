@@ -52,7 +52,7 @@ namespace IrsstReportTables
         public abstract Tuple<string, ExposureMetricFunc>[] DefineContent();
         public abstract string Description();
 
-        public void Load()
+        public void Load(object sender, DoWorkEventArgs ev)
         {
             if ( Source.Count == 0 )
             {
@@ -60,8 +60,6 @@ namespace IrsstReportTables
                 {
                     Source.Add(Emes.Aggregate(new TableEntry { Datum0 = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
                 }
-
-                this.ItemsSource = Source;
             }
         }
     }

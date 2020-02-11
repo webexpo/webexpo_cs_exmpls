@@ -12,17 +12,17 @@
             <RowDefinition Height="347*"/>
             <RowDefinition Height="285*"/>
         </Grid.RowDefinitions>
-        <Label Content="Select your table:" HorizontalAlignment="Left" Height="33" Margin="10,30,0,0" VerticalAlignment="Top" Width="106"/>
-        <ComboBox Name="Tables4Display" HorizontalAlignment="Left" Height="33" Margin="121,30,0,0" VerticalAlignment="Top" Width="148" SelectionChanged="Tables4Display_SelectionChanged"/>
-        <Button Content="Display table" HorizontalAlignment="Left" Margin="377,165,0,0" VerticalAlignment="Top" Width="119" Click="Button_Click"/>
-        <Label Name="TableDesc" Content="Table title:" HorizontalAlignment="Left" Height="33" Margin="274,30,0,0" VerticalAlignment="Top" Width="199" FontWeight="Bold"/>
-        <TextBlock Name="TableTitle" HorizontalAlignment="Left" Height="32" Margin="274,63,0,0" VerticalAlignment="Top" Width="710">
+        <Label Content="Select report table:" FontSize="15" HorizontalAlignment="Left" Height="30" Margin="10,20,0,0" VerticalAlignment="Top" Width="142"/>
+        <ComboBox Name="Tables4Display" HorizontalAlignment="Left" Height="25" Margin="150,23,0,0" VerticalAlignment="Top" Width="80" SelectionChanged="Tables4Display_SelectionChanged"/>
+        <Label Name="TableDesc" FontSize="15" Content="Table title:" HorizontalAlignment="Left" Height="30" Margin="288,20,0,0" VerticalAlignment="Top" Width="90" FontWeight="Bold" RenderTransformOrigin="1.336,0.567"/>
+        <TextBlock Name="TableTitle" FontSize="15" HorizontalAlignment="Left" Height="32" Margin="288,50,0,0" VerticalAlignment="Top" Width="696">
             <Run></Run>
         </TextBlock>
-        <Grid Name="TablePlaceholder" HorizontalAlignment="Left" Height="357" Margin="42,233,0,0" VerticalAlignment="Top" Width="836" Grid.RowSpan="2"/>
+        <Grid Name="TablePlaceholder" HorizontalAlignment="Left" Height="142" Margin="42,233,0,0" VerticalAlignment="Top" Width="836" Grid.RowSpan="2"/>
         <Grid Name="Spinner" Margin="20" Visibility="Hidden">
             <fa:ImageAwesome Icon="Spinner" Spin="True" Height="48" Width="48" />
         </Grid>
-        <TextBlock Name="SlowLoadWarning" HorizontalAlignment="Left" Height="42" Margin="274,100,0,0" TextWrapping="Wrap" Text="Warning! This table will take a while to load (~10 min)" VerticalAlignment="Top" Width="700" Visibility="Hidden" FontWeight="Bold" FontSize="18"/>
+        <TextBlock Name="SlowLoadWarning" Visibility="Visible" FontSize="16" HorizontalAlignment="Left" Height="29" Margin="288,87,0,0" TextWrapping="Wrap" Text="Warning! This table will take a while to load (~10 min)" VerticalAlignment="Top" Width="434" FontWeight="Bold" />
+        <Button Content="Display table" HorizontalAlignment="Left" Margin="288,139,0,0" VerticalAlignment="Top" Width="119" FontSize="18" Click="Button_Click"/>
     </Grid>
 </Window>
