@@ -4,38 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IrsstReportTables"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="WebExpo C# Examples - IRSST Report" Height="660" Width="920">
+        Title="WebExpo C# Examples - IRSST Report" Height="660" Width="1000">
     <Grid>
-        <TextBlock FontSize="14" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Table 3 - Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model" VerticalAlignment="Top" Height="22" Width="894" />
-
-        <local:Table3Grid Margin="180,35,180,420" >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
-                <DataGridTextColumn Header="Point estimates and 90% credible interval" Binding="{Binding Datum}" />
-            </DataGrid.Columns>
-        </local:Table3Grid>
-
-        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,224,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="808"><Span><Run Text="Table "/></Span><Span><Run Text="4"/></Span><Run Text=" - Exposure metrics point estimates and credible intervals for "/><Run Text="3"/><Run Text=" choices of prior distribution"/></TextBlock>
-
-        <local:Table4Grid Margin="190,252,190,200">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
-                <DataGridTextColumn Header="Informedvar" Binding="{Binding Datum}" />
-                <DataGridTextColumn Header="Uninformative" Binding="{Binding Datum2}" />
-                <DataGridTextColumn Header="Past.data" Binding="{Binding Datum3}" />
-            </DataGrid.Columns>
-        </local:Table4Grid>
-
-        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Left" Margin="50,446,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="808"><Run Text="Table "/><Run Text="5 "/><Run Text="- Exposure metrics point estimates and credible intervals "/><Run Text="in the presence of measurement error"/></TextBlock>
-
-        <local:Table5Grid Margin="170,470,170,20">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Parameter" Binding="{Binding Title}" />
-                <DataGridTextColumn Header="No measurement error" Binding="{Binding Datum}" />
-                <DataGridTextColumn Header="Known CV (30%)" Binding="{Binding Datum2}" />
-                <DataGridTextColumn Header="Unknown CV (15-45%)" Binding="{Binding Datum3}" />
-            </DataGrid.Columns>
-        </local:Table5Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="347*"/>
+            <RowDefinition Height="285*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Select your table:" HorizontalAlignment="Left" Height="33" Margin="10,30,0,0" VerticalAlignment="Top" Width="106"/>
+        <ComboBox Name="Tables4Display" HorizontalAlignment="Left" Height="33" Margin="121,30,0,0" VerticalAlignment="Top" Width="148" SelectionChanged="Tables4Display_SelectionChanged"/>
+        <Button Content="Display table" HorizontalAlignment="Left" Margin="377,165,0,0" VerticalAlignment="Top" Width="119" Click="Button_Click"/>
+        <Label Name="TableDesc" Content="Table title:" HorizontalAlignment="Left" Height="33" Margin="274,30,0,0" VerticalAlignment="Top" Width="199" FontWeight="Bold"/>
+        <TextBlock Name="TableTitle" HorizontalAlignment="Left" Height="32" Margin="274,63,0,0" VerticalAlignment="Top" Width="710">
+            <Run></Run>
+        </TextBlock>
+        <Grid Name="TablePlaceholder" HorizontalAlignment="Left" Height="357" Margin="42,233,0,0" VerticalAlignment="Top" Width="836" Grid.RowSpan="2"/>
+        <Grid Name="Spinner" Margin="20" Visibility="Hidden">
+            <fa:ImageAwesome Icon="Spinner" Spin="True" Height="48" Width="48" />
+        </Grid>
+        <TextBlock Name="SlowLoadWarning" HorizontalAlignment="Left" Height="42" Margin="274,100,0,0" TextWrapping="Wrap" Text="Warning! This table will take a while to load (~10 min)" VerticalAlignment="Top" Width="700" Visibility="Hidden" FontWeight="Bold" FontSize="18"/>
     </Grid>
 </Window>

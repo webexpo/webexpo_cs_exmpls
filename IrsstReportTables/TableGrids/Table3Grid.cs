@@ -12,6 +12,19 @@ namespace IrsstReportTables
 
         }
 
+        public override string Description()
+        {
+            return "Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model";
+        }
+
+        public override string[] ColumnHeadings()
+        {
+            return new string[] {
+                "Parameter",
+                "Point estimates and 90 % credible interval"
+            };
+        }
+
         public override Tuple<string, ExposureMetricFunc>[] DefineContent()
         {
             MeasureList ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },

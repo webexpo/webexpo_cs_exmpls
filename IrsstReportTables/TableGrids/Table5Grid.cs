@@ -12,9 +12,21 @@ namespace IrsstReportTables
 
         }
 
-        public Table5Grid() : base(skipLoad: false)
+        public Table5Grid() : base()
         {
+            SlowLoad = true;
+        }
 
+        public override string[] ColumnHeadings()
+        {
+            return new string[] {
+                "Parameter",
+                "Point estimates and 90 % credible interval"
+            };
+        }
+        public override string Description()
+        {
+            return "Exposure metrics point estimates and credible intervals in the presence of measurement error";
         }
 
         public override Tuple<string, ExposureMetricFunc>[] DefineContent()

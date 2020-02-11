@@ -26,35 +26,43 @@ namespace IrsstReportTables
     {
         public ObservableCollection<TableEntry> Source { get; set; } = new ObservableCollection<TableEntry>();
         public ExposureMetricEstimates[] Emes { get; set; }
-       
-        
+        public bool SlowLoad { get; set; } = false;
+
         static ReportGrid()
         {
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(ReportGrid), new FrameworkPropertyMetadata(typeof(ReportGrid)));  
         }
 
-        public ReportGrid(bool skipLoad = false) : base()
+        public ReportGrid() : base()
         {
             this.HorizontalAlignment = HorizontalAlignment.Center;
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
 
-            void Loader(object sender, RoutedEventArgs ev)
+            int i = 0;
+            foreach (var heading in ColumnHeadings() )
             {
-                foreach ( Tuple<string, ExposureMetricFunc> t in DefineContent() )
+                string idx = String.Format("Datum{0}", i++);
+                var binding = new Binding(idx);
+                this.Columns.Add(new DataGridTextColumn() { Header = heading, Binding = binding });
+            }
+        }
+
+        public abstract string[] ColumnHeadings();
+        public abstract Tuple<string, ExposureMetricFunc>[] DefineContent();
+        public abstract string Description();
+
+        public void Load()
+        {
+            if ( Source.Count == 0 )
+            {
+                foreach (Tuple<string, ExposureMetricFunc> t in DefineContent())
                 {
-                    Source.Add(Emes.Aggregate(new TableEntry { Title = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
+                    Source.Add(Emes.Aggregate(new TableEntry { Datum0 = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
                 }
 
                 this.ItemsSource = Source;
             }
-
-            if (!skipLoad)
-            {
-                this.Loaded += Loader;
-            }
         }
-
-        public abstract Tuple<string, ExposureMetricFunc>[] DefineContent();
     }
 }

@@ -8,8 +8,8 @@ namespace IrsstReportTables
 {
     public class TableEntry
     {
-        public string Title { get; set; }
-        public TableEntryData Datum { get; set; } = null;
+        public string Datum0 { get; set; } /* Title */
+        public TableEntryData Datum1 { get; set; } = null;
         public TableEntryData Datum2 { get; set; } = null;
         public TableEntryData Datum3 { get; set; } = null;
         public TableEntryData Datum4 { get; set; } = null;
@@ -17,9 +17,9 @@ namespace IrsstReportTables
 
         public TableEntry Add(TableEntryData ted)
         {
-            if ( Datum == null )
+            if ( Datum1 == null )
             {
-                Datum = ted;
+                Datum1 = ted;
             }
             else
             if ( Datum2 == null )

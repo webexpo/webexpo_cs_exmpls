@@ -20,6 +20,18 @@ namespace IrsstReportTables
 
         }
 
+        public override string[] ColumnHeadings()
+        {
+            return new string[] {
+                "Parameter",
+                "Point estimates and 90 % credible interval"
+            };
+        }
+        public override string Description()
+        {
+            return "Worker specific exposure metrics point estimates and credible intervals for the least and most exposed workers in two samples with low and high within-worker correlation";
+        }
+
         public override Tuple<string, ExposureMetricFunc>[] DefineContent()
         {
             Dictionary<string, double[]> lowWWCorrMeas = new Dictionary<string, double[]>

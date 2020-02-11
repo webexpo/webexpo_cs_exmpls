@@ -20,6 +20,18 @@ namespace IrsstReportTables
 
         }
 
+        public override string[] ColumnHeadings()
+        {
+            return new string[] {
+                "Parameter",
+                "Point estimates and 90 % credible interval"
+            };
+        }
+        public override string Description()
+        {
+            return "Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses)";
+        }
+
         public override Tuple<string, ExposureMetricFunc>[] DefineContent()
         {
             Dictionary<string, double[]> lowWWCorrMeas = new Dictionary<string, double[]>
