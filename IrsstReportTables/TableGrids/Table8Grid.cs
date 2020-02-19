@@ -41,7 +41,7 @@ namespace IrsstReportTables
 
             BWModelParameters bwParams = BWModelParameters.GetDefaults(true);
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
-                                                new BetweenWorkerModel(measures: new MeasureList(workerMeasures: realisticMeasures, oel: 85),
+                                                new BetweenWorkerModel(measures: new MeasureList(workerMeasures: realisticMeasures, oel: 150),
                                                                        specificParams: bwParams));
 
             this.Emes = new ExposureMetricEstimates[] { eme };

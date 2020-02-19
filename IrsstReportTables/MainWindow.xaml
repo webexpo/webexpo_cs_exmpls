@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IrsstReportTables"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="WebExpo C# Examples - IRSST Report" Height="500" Width="1200">
+        Title="WebExpo C# Examples - IRSST Report" Height="440" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="635*"/>
@@ -17,14 +17,15 @@
             <RowDefinition Height="285*"/>
         </Grid.RowDefinitions>
         <Label Content="Select report table:" FontSize="15" HorizontalAlignment="Left" Height="30" Margin="10,20,0,0" VerticalAlignment="Top" Width="142"/>
-        <ComboBox Name="Tables4Display" HorizontalAlignment="Left" Height="25" Margin="150,23,0,0" VerticalAlignment="Top" Width="80" SelectionChanged="Tables4Display_SelectionChanged"/>
+        <ComboBox Name="Tables4Display" HorizontalAlignment="Left" Height="25" Margin="150,25,0,0" VerticalAlignment="Top" Width="80" SelectionChanged="Tables4Display_SelectionChanged"/>
         <Label Name="TableDesc" FontSize="15" Content="Table title:" HorizontalAlignment="Left" Height="30" Margin="244,23,0,0" VerticalAlignment="Top" Width="90" FontWeight="Bold" RenderTransformOrigin="1.336,0.567"/>
-        <TextBlock Name="TableTitle" FontSize="15" HorizontalAlignment="Left" Height="32" Margin="250,54,0,0" VerticalAlignment="Top" Width="924" Grid.ColumnSpan="2" Text="-- No table selected --" />
-        <Grid Name="TablePlaceholder" HorizontalAlignment="Left" Height="Auto" Margin="250,163,0,0" VerticalAlignment="Top" Width="Auto" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+        <TextBlock Name="TableTitle" TextWrapping="Wrap" FontSize="15" HorizontalAlignment="Left" Height="52" Margin="339,28,0,0" VerticalAlignment="Top" Width="630" Grid.ColumnSpan="2" Text="-- No table selected --" />
+        <TextBlock Name="SlowLoadWarning" Visibility="Hidden" FontSize="16" Foreground="Red" HorizontalAlignment="Left" Height="29" Margin="250,80,0,0" TextWrapping="Wrap" Text="Warning! This table will take a while to load (~10 min)" VerticalAlignment="Top" Width="434" FontWeight="Bold" Grid.ColumnSpan="2" />
+
         <Grid Name="Spinner" Margin="20,20,19.6,20.2" Visibility="Hidden" Grid.ColumnSpan="2">
             <fa:ImageAwesome Icon="Spinner" Spin="True" Height="48" Width="48" />
         </Grid>
-        <TextBlock Name="SlowLoadWarning" Visibility="Visible" FontSize="16" HorizontalAlignment="Left" Height="29" Margin="248,85,0,0" TextWrapping="Wrap" Text="Warning! This table will take a while to load (~10 min)" VerticalAlignment="Top" Width="434" FontWeight="Bold" />
-        <Button Content="Display table" HorizontalAlignment="Left" Margin="248,119,0,0" VerticalAlignment="Top" Width="119" FontSize="16" Click="Button_Click"/>
+        <Button Name="DisplayButton" Content="Display table" HorizontalAlignment="Left" Margin="220,28,0,0" VerticalAlignment="Top" Width="180" FontSize="18" Click="Button_Click" Grid.Column="1" Height="35"/>
+        <StackPanel Name="TablePlaceholder" HorizontalAlignment="Left" Height="321" Margin="39,81,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="1123" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

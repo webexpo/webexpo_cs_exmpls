@@ -59,13 +59,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AihaBandProbabilities.cs" />
-    <Compile Include="BetweenWorkerWindow.xaml.cs">
-      <DependentUpon>BetweenWorkerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ExposureMetricEstimates.cs" />
     <Compile Include="OverExposureRiskPercentage.cs" />
     <Compile Include="PointEstimateWInterval.cs" />
     <Compile Include="ReportGrid.cs" />
+    <Compile Include="TableGrids\TableC3Grid.cs" />
+    <Compile Include="TableGrids\TableC2Grid.cs" />
     <Compile Include="TableGrids\Table3Grid.cs" />
     <Compile Include="TableGrids\Table4Grid.cs" />
     <Compile Include="TableGrids\Table5Grid.cs" />
@@ -74,10 +73,6 @@
     <Compile Include="TableGrids\Table8Grid.cs" />
     <Compile Include="TableEntry.cs" />
     <Compile Include="TableEntryData.cs" />
-    <Page Include="BetweenWorkerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

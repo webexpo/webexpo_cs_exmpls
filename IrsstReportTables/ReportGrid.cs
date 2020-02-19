@@ -37,6 +37,7 @@ namespace IrsstReportTables
         {
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
+            this.HorizontalAlignment = HorizontalAlignment.Center;
 
             int i = 0;
             foreach (var heading in ColumnHeadings() )

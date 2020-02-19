@@ -23,7 +23,7 @@ namespace IrsstReportTables
         }
         public override string Description()
         {
-            return "Exposure metrics point estimates and credible intervals for 4 choices of prior distribution";
+            return "Exposure metrics point estimates and credible intervals for 3 choices of prior distribution";
         }
 
     public override Tuple<string, ExposureMetricFunc>[] DefineContent()

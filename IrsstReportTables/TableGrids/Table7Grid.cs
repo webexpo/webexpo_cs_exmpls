@@ -25,6 +25,8 @@ namespace IrsstReportTables
             return new string[] {
                 "Parameter",
                 "Low within-worker correlation (rho=0.06)",
+                "High within-worker correlation (rho=0.06)",
+                "Low within-worker correlation (rho=0.66)",
                 "High within-worker correlation (rho=0.66)"
             };
         }

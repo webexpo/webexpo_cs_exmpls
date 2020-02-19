@@ -61,6 +61,12 @@ namespace IrsstReportTables
             return new PointEstimateWInterval(sdChain.Select(sd => LogNormDist ? Math.Exp(sd) : sd).ToArray<double>());
         }
 
+        public TableEntryData ArithStanDev(bool useDefaultSigma = true)
+        {
+            double[] sdChain = WorkerEstimates || !useDefaultSigma ? SigmaWithinChain : SigmaChain;
+            return new PointEstimateWInterval(sdChain);
+        }
+
         public TableEntryData ExceedanceFrac(bool addOverExpo = false)
         {
             double exc = 5;
@@ -91,6 +97,20 @@ namespace IrsstReportTables
         {
             double[] rhoChain = RhoChain();
             return new PointEstimateWInterval(rhoChain);
+        }
+
+        public TableEntryData RDiff(double rAppapCoverage = 80)
+        {
+            double[] muOChain = BWModel.Result.GetChainByName("muOverallSample");
+            double[] chaine = new double[muOChain.Length];
+            double groupMean = PointEstimateWInterval.GeomMean(muOChain);
+            var c = 2 * NormalDistribution.QNorm(1 - (100 - rAppapCoverage) / 200) / groupMean;
+            for (int i = 0; i < muOChain.Length; i++)
+            {
+                chaine[i] = c * SigmaChain[i];
+            }
+
+            return new PointEstimateWInterval(chaine);
         }
 
         public TableEntryData RRatio()
@@ -184,11 +204,11 @@ namespace IrsstReportTables
         double[] IndivOverexpoP95Chain()
         {
             double[] chain = new double[SigmaChain.Length];
-
+            double qn = NormalDistribution.QNorm(TargetPerc / 100);
+            double oelVal = LogNormDist ? Math.Log(Oel) : Oel;
             for (int i = 0; i < SigmaChain.Length; i++)
             {
-                double qn = NormalDistribution.QNorm(TargetPerc / 100);
-                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log(Oel) : Oel) - MuChain[i] - qn * SigmaWithinChain[i]) / SigmaChain[i]));
+                chain[i] = 100 * (1 - NormalDistribution.PNorm((oelVal - MuChain[i] - (qn * SigmaWithinChain[i])) / SigmaChain[i]));
             }
             return chain;
         }
@@ -199,7 +219,8 @@ namespace IrsstReportTables
 
             for (int i = 0; i < SigmaChain.Length; i++)
             {
-                chain[i] = 100 * (1 - NormalDistribution.PNorm(((LogNormDist ? Math.Log(Oel) : Oel) - MuChain[i] - 0.5 * Math.Pow(SigmaWithinChain[i], 2)) / SigmaChain[i]));
+                double numer = LogNormDist ? ( Math.Log(Oel) - MuChain[i] - 0.5 * Math.Pow(SigmaWithinChain[i], 2) ) : (Oel - MuChain[i]);
+                chain[i] = 100 * (1 - NormalDistribution.PNorm(numer / SigmaChain[i]));
             }
 
             return chain;
