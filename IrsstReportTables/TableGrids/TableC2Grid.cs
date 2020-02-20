@@ -30,8 +30,8 @@ namespace IrsstReportTables
             MeasureList ml = new MeasureList(measures: new[] { 81, 79.5, 80.7, 78.1, 80.1, 74.8, 74.8, 79.8, 79.8 },
                                       oel: 85);
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
-                                            new SEGInformedVarModel(measures: ml, specificParams:
-                                                SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: false)));
+                                            new SEGUninformativeModel(measures: ml, specificParams:
+                                                UninformativeModelParameters.GetDefaults(logNormalDstrn: false)));
             this.Emes = new ExposureMetricEstimates[] { eme };
 
             return new Tuple<string, ExposureMetricFunc>[] {
