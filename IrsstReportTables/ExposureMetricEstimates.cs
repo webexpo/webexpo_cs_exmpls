@@ -104,7 +104,7 @@ namespace IrsstReportTables
             double[] muOChain = BWModel.Result.GetChainByName("muOverallSample");
             double[] chaine = new double[muOChain.Length];
             double groupMean = PointEstimateWInterval.GeomMean(muOChain);
-            var c = 2 * NormalDistribution.QNorm(1 - (100 - rAppapCoverage) / 200) / groupMean;
+            var c = 100 * (2 * NormalDistribution.QNorm(1 - (100 - rAppapCoverage) / 200) / groupMean);
             for (int i = 0; i < muOChain.Length; i++)
             {
                 chaine[i] = c * SigmaChain[i];
