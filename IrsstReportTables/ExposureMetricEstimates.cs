@@ -15,8 +15,8 @@ namespace IrsstReportTables
         bool LogNormDist { get; set; } = true;
         double TargetPerc { get; set; } = 95;
         public double[] MuChain { get; set; }
-        double[] SigmaChain { get; set; }
-        double[] SigmaWithinChain { get; set; } = null;
+        public double[] SigmaChain { get; set; }
+        public double[] SigmaWithinChain { get; set; } = null;
         public BetweenWorkerModel BWModel { get; set; } = null;
         string[] WorkerIds = null;
         bool WorkerEstimates { get; set; } = false;
@@ -186,7 +186,9 @@ namespace IrsstReportTables
             double[] rhoChain = new double[SigmaChain.Length];
             for (int i = 0; i < SigmaChain.Length; i++)
             {
-                rhoChain[i] = Math.Pow(SigmaChain[i], 2) / (Math.Pow(SigmaChain[i], 2) + Math.Pow(SigmaWithinChain[i], 2));
+                double sb2 = Math.Pow(SigmaChain[i], 2);
+                double sw2 = Math.Pow(SigmaWithinChain[i], 2);
+                rhoChain[i] = sb2 / (sb2 + sw2);
             }
             return rhoChain;
         }

@@ -38,6 +38,7 @@ namespace IrsstReportTables
             this.IsReadOnly = true;
             this.AutoGenerateColumns = false;
             this.HorizontalAlignment = HorizontalAlignment.Center;
+            this.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
 
             int i = 0;
             foreach (var heading in ColumnHeadings() )
