@@ -33,8 +33,11 @@ namespace IrsstReportTables
             SEGInformedVarModelParameters modelParams = SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true);
             this.OverwriteDefaults(modelParams, customVals);
 
+            McmcParameters mcmcParams = new McmcParameters();
+            this.OverwriteDefaults(mcmcParams, customVals);
+
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
-                                            new SEGInformedVarModel(measures: ml, specificParams: modelParams));
+                                            new SEGInformedVarModel(measures: ml, specificParams: modelParams, mcmcParams : mcmcParams));
             this.Emes = new ExposureMetricEstimates[] { eme };
 
             return new Tuple<string, ExposureMetricFunc>[] {

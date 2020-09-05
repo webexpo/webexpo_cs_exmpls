@@ -30,9 +30,17 @@ namespace IrsstReportTables
         {
             MeasureList ml = new MeasureList(measures: new[] { 81, 79.5, 80.7, 78.1, 80.1, 74.8, 74.8, 79.8, 79.8 },
                                       oel: 85);
+
+            UninformativeModelParameters modelParams = UninformativeModelParameters.GetDefaults(logNormalDstrn: false);
+            this.OverwriteDefaults(modelParams, customVals);
+
+            McmcParameters mcmcParams = new McmcParameters();
+            this.OverwriteDefaults(mcmcParams, customVals);
+
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
-                                            new SEGUninformativeModel(measures: ml, specificParams:
-                                                UninformativeModelParameters.GetDefaults(logNormalDstrn: false)));
+                                            new SEGUninformativeModel(measures: ml,
+                                                                      specificParams: modelParams,
+                                                                      mcmcParams: mcmcParams));
             this.Emes = new ExposureMetricEstimates[] { eme };
 
             return new Tuple<string, ExposureMetricFunc>[] {

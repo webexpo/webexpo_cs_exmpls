@@ -31,21 +31,35 @@ namespace IrsstReportTables
         {
             MeasureList ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },
                                       oel: 100);
-            
+
+            SEGInformedVarModelParameters modelParams = SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true);
+            this.OverwriteDefaults(modelParams, customVals);
+
+            McmcParameters mcmcParams = new McmcParameters();
+            this.OverwriteDefaults(mcmcParams, customVals);
+
             ExposureMetricEstimates emeInformed = new ExposureMetricEstimates(
                 new SEGInformedVarModel(
                     measures: ml,
-                    specificParams: SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true)
+                    specificParams: modelParams,
+                    mcmcParams : mcmcParams
                 ));
+
+            UninformativeModelParameters uninfModelParams = UninformativeModelParameters.GetDefaults(logNormalDstrn: true);
+            this.OverwriteDefaults(modelParams, customVals);
+
             ExposureMetricEstimates emeUninformed = new ExposureMetricEstimates(
                 new SEGUninformativeModel(
                     measures: ml,
-                    specificParams: UninformativeModelParameters.GetDefaults(logNormalDstrn: true)
+                    specificParams: uninfModelParams,
+                    mcmcParams: mcmcParams
                 ));
+
             ExposureMetricEstimates emePdInformed = new ExposureMetricEstimates(
                 new SEGInformedVarModel(
                     measures: ml,
-                    specificParams: SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true),
+                    specificParams: modelParams,
+                    mcmcParams : mcmcParams,
                     pastDataSummary: new PastDataSummary(mean: Math.Log(5), sd: Math.Log(2.4), n: 5)
                 ));
 
