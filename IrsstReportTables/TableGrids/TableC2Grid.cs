@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Zygotine.WebExpo;
 
 namespace IrsstReportTables
 {
-    using ExposureMetricFunc = Func<ExposureMetricEstimates, TableEntryData>;
+    using ExposureMetricFunc = System.Func<ExposureMetricEstimates, TableEntryData>;
 
     public class TableC2Grid : ReportGrid
     {
@@ -25,7 +26,7 @@ namespace IrsstReportTables
             };
         }
 
-        public override Tuple<string, ExposureMetricFunc>[] DefineContent()
+        public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string, double> customVals)
         {
             MeasureList ml = new MeasureList(measures: new[] { 81, 79.5, 80.7, 78.1, 80.1, 74.8, 74.8, 79.8, 79.8 },
                                       oel: 85);

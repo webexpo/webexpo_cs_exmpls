@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Zygotine.WebExpo;
 
 namespace IrsstReportTables
@@ -25,13 +26,15 @@ namespace IrsstReportTables
             };
         }
 
-        public override Tuple<string, ExposureMetricFunc>[] DefineContent()
+        public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string,double> customVals)
         {
             MeasureList ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },
                                       oel: 100);
+            SEGInformedVarModelParameters modelParams = SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true);
+            this.OverwriteDefaults(modelParams, customVals);
+
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
-                                            new SEGInformedVarModel(measures: ml, specificParams:
-                                                SEGInformedVarModelParameters.GetDefaults(logNormalDstrn: true)));
+                                            new SEGInformedVarModel(measures: ml, specificParams: modelParams));
             this.Emes = new ExposureMetricEstimates[] { eme };
 
             return new Tuple<string, ExposureMetricFunc>[] {

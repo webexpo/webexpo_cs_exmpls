@@ -33,7 +33,7 @@ namespace IrsstReportTables
             return "Exposure metrics point estimates and credible intervals for an example of Bayesian calculation for the lognormal model (between-worker difference analyses)";
         }
 
-        public override Tuple<string, ExposureMetricFunc>[] DefineContent()
+        public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string, double> customVals)
         {
             Dictionary<string, double[]> lowWWCorrMeas = new Dictionary<string, double[]>
             {
