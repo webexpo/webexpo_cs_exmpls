@@ -35,7 +35,7 @@ namespace IrsstReportTables
             return "Worker specific exposure metrics point estimates and credible intervals for the least and most exposed workers in two samples with low and high within-worker correlation";
         }
 
-        public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string, double> customVals)
+        public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string, object> customVals)
         {
             Dictionary<string, double[]> lowWWCorrMeas = new Dictionary<string, double[]>
             {

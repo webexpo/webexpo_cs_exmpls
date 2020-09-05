@@ -27,7 +27,7 @@ namespace IrsstReportTables
             return "Exposure metrics point estimates and credible intervals for 3 choices of prior distribution";
         }
 
-    public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string, double> customVals)
+    public override Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string, object> customVals)
         {
             MeasureList ml = new MeasureList(measures: new[] { 24.7, 64.1, 13.8, 43.7, 19.9, 133, 32.1, 15, 53.7 },
                                       oel: 100);

@@ -50,25 +50,30 @@ namespace IrsstReportTables
         }
 
         public abstract string[] ColumnHeadings();
-        public abstract Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string,double> customVals = null);
+        public abstract Tuple<string, ExposureMetricFunc>[] DefineContent(Dictionary<string,object> customVals = null);
         public abstract string Description();
 
         public void Load(object sender, DoWorkEventArgs ev)
         {
+            Dictionary<string, object> newVals = new Dictionary<string, object>
+            {
+                { "MuLower", 123 }
+            };
+
             if ( Source.Count == 0 )
             {
-                foreach (Tuple<string, ExposureMetricFunc> t in DefineContent())
+                foreach (Tuple<string, ExposureMetricFunc> t in DefineContent(newVals))
                 {
                     Source.Add(Emes.Aggregate(new TableEntry { Datum0 = t.Item1 }, (te, e) => te.Add(t.Item2(e))));
                 }
             }
         }
 
-        protected void OverwriteDefaults(Object defaultModelParams, Dictionary<string, double> newVals)
+        protected void OverwriteDefaults(Object defaultModelParams, Dictionary<string, object> newVals)
         {
             if (newVals != null)
             {
-                foreach (KeyValuePair<string, double> entry in newVals)
+                foreach (KeyValuePair<string, object> entry in newVals)
                 {
                     var property = defaultModelParams.GetType().GetProperty(entry.Key);
                     if (property != null)
