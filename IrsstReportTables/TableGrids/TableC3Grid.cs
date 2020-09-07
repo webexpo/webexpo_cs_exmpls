@@ -46,11 +46,11 @@ namespace IrsstReportTables
                 { "worker-10", new double[]{ 89.1, 85.4, 81.8, 88.1, 86.4, 81.6, 86.8, 81.4, 86.7, 83.6 } }
             };
 
-            BWModelParameters modelParams = BWModelParameters.GetDefaults(logNormalDstrn: true);
-            this.OverwriteDefaults(modelParams, customVals);
+            BWModelParameters modelParams = BWModelParameters.GetDefaults(logNormalDstrn: false);
+            //this.OverwriteDefaults(modelParams, customVals);
 
             McmcParameters mcmcParams = new McmcParameters();
-            this.OverwriteDefaults(mcmcParams, customVals);
+            //this.OverwriteDefaults(mcmcParams, customVals);
 
             ExposureMetricEstimates eme = new ExposureMetricEstimates(
                                                 new BetweenWorkerModel(measures: new MeasureList(workerMeasures: realisticMeasures, oel: 85),
